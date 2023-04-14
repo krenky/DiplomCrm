@@ -56,4 +56,5 @@ export default class App extends Component {
         const data = await response.json();
         this.setState({ forecasts: data, loading: false });
     }
+
 }

@@ -17,6 +17,7 @@ namespace webapi.Controllers
         }
 
         [HttpPut]
+        [Route("create")]
         public async Task<IActionResult> Create(string name)
         {
             if (!string.IsNullOrEmpty(name))
@@ -38,6 +39,7 @@ namespace webapi.Controllers
         }
 
         [HttpDelete]
+        [Route("delete")]
         public async Task<IActionResult> Delete(string id)
         {
             IdentityRole role = await _roleManager.FindByIdAsync(id);
@@ -73,6 +75,7 @@ namespace webapi.Controllers
         //    return NotFound();
         //}
         [HttpPost]
+        [Route("edit")]
         public async Task<IActionResult> Edit(string userId, List<string> roles)
         {
             // получаем пользователя

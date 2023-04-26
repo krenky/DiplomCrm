@@ -141,7 +141,8 @@ namespace webapi.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<ApplicationUser>> CheckLogin()
+        [Route("CurrentUser")]
+        public async Task<ActionResult<ApplicationUser>> GetCurrentUser()
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser applicationUser = await _userManager.FindByIdAsync(userId);

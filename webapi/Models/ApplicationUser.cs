@@ -4,16 +4,7 @@ namespace webapi.Models
 {
     public class ApplicationUser : IdentityUser
     {
-    }
-    public enum Role
-    {
-        SystemAdministrator,
-        Administrator,
-        Operator,
-        Manager,
-        HeadOfSales,
-        MarketingSpecialist,
-        HeadOfService,      //руководитель сервиса
-        ServiceManger       //сервис-менеджер
+        public string JobTitle { get; set; }
+        public RepairOrder[] RepairOrders { get; set; }
     }
 }

@@ -7,22 +7,26 @@ namespace webapi.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        DbSet<ApplicationUser> AspNetUsers { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
-            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole(Role.SystemAdministrator.ToString()),
+
+            modelBuilder.Entity<IdentityRole>().HasData(
                                                         new IdentityRole(Role.Administrator.ToString()),
-                                                        new IdentityRole(Role.Operator.ToString()),
-                                                        new IdentityRole(Role.Manager.ToString()),
-                                                        new IdentityRole(Role.HeadOfSales.ToString()),
-                                                        new IdentityRole(Role.MarketingSpecialist.ToString()),
-                                                        new IdentityRole(Role.HeadOfService.ToString()),
-                                                        new IdentityRole(Role.ServiceManger.ToString()));
+                                                        new IdentityRole(Role.ServiceManager.ToString()),
+                                                        new IdentityRole(Role.Technician.ToString()),
+                                                        new IdentityRole(Role.ITSupport.ToString()),
+                                                        new IdentityRole(Role.Executive.ToString()));
             base.OnModelCreating(modelBuilder);
         }
+        public DbSet<webapi.Models.Customer> Customer { get; set; } = default!;
+        public DbSet<webapi.Models.Device> Device { get; set; } = default!;
+        public DbSet<webapi.Models.InventoryItem> InventoryItem { get; set; } = default!;
+        public DbSet<webapi.Models.RepairOrder> RepairOrder { get; set; } = default!;
     }
 }

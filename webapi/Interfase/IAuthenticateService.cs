@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using webapi.Models.Authenticate;
-using webapi.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using webapi.Models;
+using webapi.Models.Authenticate;
 
 namespace webapi.Interfase
 {

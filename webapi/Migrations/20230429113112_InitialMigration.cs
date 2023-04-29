@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -164,14 +163,11 @@ namespace webapi.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "0769313a-7a4c-47cc-bc56-bb2d822a5c57", null, "HeadOfSales", null },
-                    { "1393e545-abcc-4983-98a4-3f5f11f11135", null, "Administrator", null },
-                    { "4244fda5-b85b-4edf-a6a5-af796065bb48", null, "MarketingSpecialist", null },
-                    { "45607eaa-1531-430b-9041-0c3cb31d6280", null, "HeadOfService", null },
-                    { "4de6f9a8-79a7-40e2-9875-a98b9980731c", null, "SystemAdministrator", null },
-                    { "58bf62a8-34ab-4c85-ae93-4987fbcfdd43", null, "Operator", null },
-                    { "67934967-ad5e-4c19-a9ee-072ca5f1bd63", null, "ServiceManger", null },
-                    { "78c4202b-3542-483a-a96f-71598b88c93d", null, "Manager", null }
+                    { "416ef657-d54e-436d-a9b1-18d725c71452", null, "Administrator", null },
+                    { "58811505-68b1-4c18-a06c-97c9bdfa470d", null, "Executive", null },
+                    { "660f2909-8945-4c69-8f01-d6b00b22e5dc", null, "ITSupport", null },
+                    { "9946dc01-a239-4242-80a1-ae14ccab8bf7", null, "ServiceManager", null },
+                    { "e667cc05-91b9-4ed6-8996-692a64951a85", null, "Technician", null }
                 });
 
             migrationBuilder.CreateIndex(

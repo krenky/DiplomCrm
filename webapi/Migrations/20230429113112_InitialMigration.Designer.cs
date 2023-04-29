@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using webapi.Data;
@@ -11,9 +12,11 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230429113112_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,27 +53,27 @@ namespace webapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "02f5a2bf-3078-435c-ab31-52c3fb5d16d3",
+                            Id = "416ef657-d54e-436d-a9b1-18d725c71452",
                             Name = "Administrator"
                         },
                         new
                         {
-                            Id = "36812fae-6dfa-4b45-b06c-54c6053332f6",
+                            Id = "9946dc01-a239-4242-80a1-ae14ccab8bf7",
                             Name = "ServiceManager"
                         },
                         new
                         {
-                            Id = "1dbe60e0-9802-42e9-a952-18bda1c61d89",
+                            Id = "e667cc05-91b9-4ed6-8996-692a64951a85",
                             Name = "Technician"
                         },
                         new
                         {
-                            Id = "811865b7-2384-47ea-8b46-59a2553924aa",
+                            Id = "660f2909-8945-4c69-8f01-d6b00b22e5dc",
                             Name = "ITSupport"
                         },
                         new
                         {
-                            Id = "72e8e07b-75e4-40e6-a9e9-13b3414c6b32",
+                            Id = "58811505-68b1-4c18-a06c-97c9bdfa470d",
                             Name = "Executive"
                         });
                 });
@@ -200,10 +203,6 @@ namespace webapi.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("JobTitle")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
 
@@ -247,149 +246,6 @@ namespace webapi.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("webapi.Models.Customer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Customer");
-                });
-
-            modelBuilder.Entity("webapi.Models.Device", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Manufacturer")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ModelDevice")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("SerialNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Device");
-                });
-
-            modelBuilder.Entity("webapi.Models.InventoryItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Picture")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("QuantityInStock")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("RepairOrderId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RepairOrderId");
-
-                    b.ToTable("InventoryItem");
-                });
-
-            modelBuilder.Entity("webapi.Models.RepairOrder", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AspNetUserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("DeviceId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("DeviceId");
-
-                    b.ToTable("RepairOrder");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -441,51 +297,6 @@ namespace webapi.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("webapi.Models.InventoryItem", b =>
-                {
-                    b.HasOne("webapi.Models.RepairOrder", null)
-                        .WithMany("PartsUsed")
-                        .HasForeignKey("RepairOrderId");
-                });
-
-            modelBuilder.Entity("webapi.Models.RepairOrder", b =>
-                {
-                    b.HasOne("webapi.Models.ApplicationUser", null)
-                        .WithMany("RepairOrders")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("webapi.Models.Customer", "Customer")
-                        .WithMany("RepairOrders")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("webapi.Models.Device", "Device")
-                        .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Device");
-                });
-
-            modelBuilder.Entity("webapi.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("RepairOrders");
-                });
-
-            modelBuilder.Entity("webapi.Models.Customer", b =>
-                {
-                    b.Navigation("RepairOrders");
-                });
-
-            modelBuilder.Entity("webapi.Models.RepairOrder", b =>
-                {
-                    b.Navigation("PartsUsed");
                 });
 #pragma warning restore 612, 618
         }

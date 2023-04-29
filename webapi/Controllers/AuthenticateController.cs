@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using webapi.Interfase;
 using webapi.Models;
 using webapi.Models.Authenticate;
@@ -21,7 +18,7 @@ namespace webapi.Controllers
         private readonly IConfiguration _configuration;
         private readonly IAuthenticateService _authenticateService;
 
-        public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, 
+        public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,
             IConfiguration configuration, IAuthenticateService authenticateService)
         {
             _userManager = userManager;
@@ -40,7 +37,7 @@ namespace webapi.Controllers
         {
             try
             {
-                 var result = await _authenticateService.Register(model);
+                var result = await _authenticateService.Register(model);
                 if (result.Succeeded)
                 {
                     return Ok(result);
@@ -50,7 +47,7 @@ namespace webapi.Controllers
                     return StatusCode(500, new { Status = "Error", Message = $"User creation failes! {string.Join(", ", result.Errors)}" });
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, new { Status = "Error", Message = ex.Message });
             }
@@ -101,9 +98,9 @@ namespace webapi.Controllers
         public async Task<ActionResult> Login([FromBody] LoginModel model)
         {
             var result = await _authenticateService.Login(model);
-            if(result != null)
+            if (result != null)
                 return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(result), expiration = result.ValidTo });
-            else 
+            else
                 return Unauthorized();
         }
 

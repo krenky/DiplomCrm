@@ -24,5 +24,9 @@ namespace webapi.Data
                                                         new IdentityRole(Role.Executive.ToString()));
             base.OnModelCreating(modelBuilder);
         }
+        public DbSet<webapi.Models.Customer> Customer { get; set; } = default!;
+        public DbSet<webapi.Models.Device> Device { get; set; } = default!;
+        public DbSet<webapi.Models.InventoryItem> InventoryItem { get; set; } = default!;
+        public DbSet<webapi.Models.RepairOrder> RepairOrder { get; set; } = default!;
     }
 }

@@ -5,14 +5,19 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using webapi.Data;
+using webapi.Interfase;
 using webapi.Models;
+using webapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Add services to the container.
+#region DI
+builder.Services.AddScoped<IAuthenticateService, AuthenticateService>();
 
+#endregion
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connection));

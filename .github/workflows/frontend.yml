@@ -28,7 +28,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./reactpapptypescript
-        run: npm ci
+        run: npm i
 
       - name: Build
         working-directory: ./reactpapptypescript

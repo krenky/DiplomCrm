@@ -53,6 +53,7 @@
   "dependencies": {
     "css-select": "^5.1.0",
     "faker": "^5.5.3",
+    "gh-pages": "^5.0.0",
     "i": "^0.3.7",
     "jwt-decode": "^3.1.2",
     "npm": "^9.6.6",
@@ -65,5 +66,6 @@
   },
   "overrides": {
     "svgo": "^2"
-  }
+  },
+  "homepage": "."
 }

@@ -7,13 +7,13 @@ const packages = fs.readdirSync(path.resolve(__dirname, '../../packages'));
 const aliases = packages.reduce((acc, dirName) => {
     const packageJson = require(path.resolve(
         __dirname,
-        '../../packages',
+        '../../reactpapptypescript',
         dirName,
         'package.json'
     ));
     acc[packageJson.name] = path.resolve(
         __dirname,
-        `${path.resolve('../..')}/node_modules/${packageJson.name}/src`
+        `${path.resolve('../..')}/reactpapptypescript/${packageJson.name}/src`
     );
     return acc;
 }, {});

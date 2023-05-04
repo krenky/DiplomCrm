@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import react from '@vitejs/plugin-react';
 
-const packages = fs.readdirSync(path.resolve(__dirname, '../../packages'));
+const packages = fs.readdirSync(path.resolve(__dirname, '../../reactpapptypescript'));
 const aliases = packages.reduce((acc, dirName) => {
     const packageJson = require(path.resolve(
         __dirname,

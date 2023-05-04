@@ -8,6 +8,7 @@
     "@storybook/react": "^7.0.5",
     "path": "^0.12.7",
     "react": "^18.2.0",
+    "react-admin": "^4.10.1",
     "react-router-dom": "^6.10.0"
   },
   "devDependencies": {

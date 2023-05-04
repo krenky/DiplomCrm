@@ -3,17 +3,16 @@ import path from 'path';
 import fs from 'fs';
 import react from '@vitejs/plugin-react';
 
-const packages = fs.readdirSync(path.resolve(__dirname, '../../reactpapptypescript'));
+const packages = fs.readdirSync(path.resolve(__dirname, './node_modules'));
 const aliases = packages.reduce((acc, dirName) => {
     const packageJson = require(path.resolve(
         __dirname,
-        '../../reactpapptypescript',
-        dirName,
+        './',
         'package.json'
     ));
     acc[packageJson.name] = path.resolve(
         __dirname,
-        `${path.resolve('../..')}/reactpapptypescript/${packageJson.name}/src`
+        `${path.resolve('../..')}/packages/${packageJson.name}/src`
     );
     return acc;
 }, {});
@@ -22,7 +21,7 @@ const aliases = packages.reduce((acc, dirName) => {
 export default defineConfig({
     plugins: [react()],
     define: {
-        'process.env': process.env,
+        "process.env": `(${JSON.stringify(process.env)})`
     },
     server: {
         port: 8000,
@@ -34,6 +33,11 @@ export default defineConfig({
     },
     build: {
         sourcemap: true,
+        lib:{
+            entry: path.resolve('./src', 'index.tsx'),
+            name: 'MyLib',
+            fileName: (format) => `my-lib.${format}.js`
+        }
     },
     resolve: {
         preserveSymlinks: true,

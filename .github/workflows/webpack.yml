@@ -30,5 +30,6 @@ jobs:
     - name: Build
       working-directory: ./reactpapptypescript
       run: |
+        npm install -D webpack-cli
         npm install
         npx webpack

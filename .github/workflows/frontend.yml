@@ -27,9 +27,11 @@ jobs:
           cache-dependency-path: ./reactpapptypescript/package-lock.json
 
       - name: Install dependencies
+        working-directory: ./reactpapptypescript
         run: npm ci
 
       - name: Build
+        working-directory: ./reactpapptypescript
         run: npm run build
 
       - name: Run my action

@@ -13,7 +13,7 @@ const aliases = packages.reduce((acc, dirName) => {
     ));
     acc[packageJson.name] = path.resolve(
         __dirname,
-        `${path.resolve('../..')}/packages/${packageJson.name}/src`
+        `${path.resolve('../..')}/node_modules/${packageJson.name}/src`
     );
     return acc;
 }, {});

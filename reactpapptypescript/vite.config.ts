@@ -3,12 +3,11 @@ import path from 'path';
 import fs from 'fs';
 import react from '@vitejs/plugin-react';
 
-const packages = fs.readdirSync(path.resolve(__dirname, '../../packages'));
+const packages = fs.readdirSync(path.resolve(__dirname, './node_modules'));
 const aliases = packages.reduce((acc, dirName) => {
     const packageJson = require(path.resolve(
         __dirname,
-        '../../packages',
-        dirName,
+        './',
         'package.json'
     ));
     acc[packageJson.name] = path.resolve(
@@ -20,20 +19,26 @@ const aliases = packages.reduce((acc, dirName) => {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    base:'/reactpapptypescript/',
     plugins: [react()],
     define: {
-        'process.env': process.env,
+        "process.env": `(${JSON.stringify(process.env)})`
     },
     server: {
         port: 8000,
         open: true,
     },
-    base: './',
+    //base: './',
     esbuild: {
         keepNames: true,
     },
     build: {
         sourcemap: true,
+        lib:{
+            entry: path.resolve('./src', 'index.tsx'),
+            name: 'build',
+            fileName: (format) => `my-lib.${format}.js`
+        }
     },
     resolve: {
         preserveSymlinks: true,

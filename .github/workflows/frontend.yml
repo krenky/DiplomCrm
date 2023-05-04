@@ -32,7 +32,7 @@ jobs:
 
       - name: Build
         working-directory: ./reactpapptypescript
-        run: npm run build
+        run: npm run start
 
       - name: Run my action
         uses: ./

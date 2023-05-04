@@ -5,16 +5,19 @@ on:
   pull_request:
     branches: [ "master" ]
 
+defaults:
+      run:
+        working-directory: ./reactpapptypescript
+
 jobs:
   run-action:
     name: Run action
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./reactpapptypescript
+    
 
     steps:
       - uses: actions/checkout@v2
+      
 
       - name: Use Node.js 18.16.0
         uses: actions/setup-node@v2

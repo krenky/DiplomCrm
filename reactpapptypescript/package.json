@@ -10,7 +10,9 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "ph-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -53,7 +55,6 @@
   "dependencies": {
     "css-select": "^5.1.0",
     "faker": "^5.5.3",
-    "gh-pages": "^5.0.0",
     "i": "^0.3.7",
     "jwt-decode": "^3.1.2",
     "npm": "^9.6.6",
@@ -67,5 +68,5 @@
   "overrides": {
     "svgo": "^2"
   },
-  "homepage": "."
+  "homepage": "https://krenky.github.io/DiplomCrm/reactpapptypescript"
 }

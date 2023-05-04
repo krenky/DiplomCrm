@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 18.16
           cache: 'npm'
-          cache-dependency-path: package-lock.json
+          cache-dependency-path: ./reactpapptypescript/package-lock.json
 
       - name: Install dependencies
         run: npm ci

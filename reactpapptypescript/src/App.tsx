@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Admin, Resource, ListGuesser, defaultTheme } from 'react-admin';
 import { dataProvider } from './dataProvider';
-import authProvider from './providers/authProvider';
+//import authProvider from './providers/authProvider';
+import { authProvider } from './authProvider';
 import Layout from './Layout';
 import contacts from './contacts';
 import companies from './companies';
@@ -22,6 +23,7 @@ const App = () => (
                 },
             },
         }}
+        requireAuth
     >
         <Resource name="deals" {...deals} />
         <Resource name="contacts" {...contacts} />

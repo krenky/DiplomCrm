@@ -16,8 +16,7 @@ jobs:
     
 
     steps:
-      - uses: actions/checkout@v3
-      
+
 
       - name: Use Node.js 18.16.0
         uses: actions/setup-node@v2
@@ -34,5 +33,5 @@ jobs:
         working-directory: ./reactpapptypescript
         run: npm run build
 
-      - name: Run my action
-        uses: ./reactpapptypescript
+
+        

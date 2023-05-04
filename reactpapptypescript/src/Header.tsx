@@ -30,7 +30,7 @@ const Header = () => {
                                 alt="Bosch Logo"
                             />
                             <Typography component="span" variant="h5">
-                                Atomic CRM
+                                Атомная CRM
                             </Typography>
                         </Box>
                         <Box>
@@ -41,25 +41,25 @@ const Header = () => {
                                 textColor="inherit"
                             >
                                 <Tab
-                                    label={'Dashboard'}
+                                    label={'Дашборд'}
                                     component={Link}
                                     to="/"
                                     value="/"
                                 />
                                 <Tab
-                                    label={'Contacts'}
+                                    label={'Контакты'}
                                     component={Link}
                                     to="/contacts"
                                     value="/contacts"
                                 />
                                 <Tab
-                                    label={'Companies'}
+                                    label={'Клиенты'}
                                     component={Link}
                                     to="/companies"
                                     value="/companies"
                                 />
                                 <Tab
-                                    label={'Deals'}
+                                    label={'Заявки'}
                                     component={Link}
                                     to="/deals"
                                     value="/deals"

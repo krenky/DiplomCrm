@@ -1,4 +1,4 @@
-import { company, internet, address, phone, random } from 'faker/locale/ru_RU';
+import { company, internet, address, phone, random } from 'faker/locale/en_US';
 import { randomDate } from './utils';
 
 import { Db } from './types';

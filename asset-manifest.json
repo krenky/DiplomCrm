@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/DiplomCrm/reactpapptypescript/static/js/main.4a3da8ad.js",
-    "static/js/787.9f408080.chunk.js": "/DiplomCrm/reactpapptypescript/static/js/787.9f408080.chunk.js",
-    "index.html": "/DiplomCrm/reactpapptypescript/index.html",
-    "main.4a3da8ad.js.map": "/DiplomCrm/reactpapptypescript/static/js/main.4a3da8ad.js.map",
-    "787.9f408080.chunk.js.map": "/DiplomCrm/reactpapptypescript/static/js/787.9f408080.chunk.js.map"
+    "main.js": "/DiplomCrm/static/js/main.cbaac9b2.js",
+    "static/js/787.9f408080.chunk.js": "/DiplomCrm/static/js/787.9f408080.chunk.js",
+    "index.html": "/DiplomCrm/index.html",
+    "main.cbaac9b2.js.map": "/DiplomCrm/static/js/main.cbaac9b2.js.map",
+    "787.9f408080.chunk.js.map": "/DiplomCrm/static/js/787.9f408080.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.4a3da8ad.js"
+    "static/js/main.cbaac9b2.js"
   ]
 }

@@ -19,6 +19,7 @@ const aliases = packages.reduce((acc, dirName) => {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    base:'/reactpapptypescript/',
     plugins: [react()],
     define: {
         "process.env": `(${JSON.stringify(process.env)})`
@@ -27,7 +28,7 @@ export default defineConfig({
         port: 8000,
         open: true,
     },
-    base: './',
+    //base: './',
     esbuild: {
         keepNames: true,
     },
@@ -35,7 +36,7 @@ export default defineConfig({
         sourcemap: true,
         lib:{
             entry: path.resolve('./src', 'index.tsx'),
-            name: 'MyLib',
+            name: 'build',
             fileName: (format) => `my-lib.${format}.js`
         }
     },

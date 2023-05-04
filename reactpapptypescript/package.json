@@ -10,7 +10,9 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "ph-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -65,5 +67,6 @@
   },
   "overrides": {
     "svgo": "^2"
-  }
+  },
+  "homepage": "https://krenky.github.io/DiplomCrm/reactpapptypescript"
 }

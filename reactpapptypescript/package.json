@@ -10,9 +10,7 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "ph-pages -d build"
+    "preview": "vite preview"
   },
   "eslintConfig": {
     "extends": [

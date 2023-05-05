@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "reactapp", "reactapp\reactapp.esproj", "{B9E28EE6-3C8A-4DBE-AB95-363F7A919D3D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "webapi", "webapi\webapi.csproj", "{86DA88D7-7B3D-4904-8E65-6F2B9686814A}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "reactpapptypescript", "reactpapptypescript\reactpapptypescript.esproj", "{5C62E85A-7D82-451A-A0A6-F17DB0B21D1C}"
@@ -15,12 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B9E28EE6-3C8A-4DBE-AB95-363F7A919D3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B9E28EE6-3C8A-4DBE-AB95-363F7A919D3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B9E28EE6-3C8A-4DBE-AB95-363F7A919D3D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{B9E28EE6-3C8A-4DBE-AB95-363F7A919D3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B9E28EE6-3C8A-4DBE-AB95-363F7A919D3D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B9E28EE6-3C8A-4DBE-AB95-363F7A919D3D}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{86DA88D7-7B3D-4904-8E65-6F2B9686814A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{86DA88D7-7B3D-4904-8E65-6F2B9686814A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86DA88D7-7B3D-4904-8E65-6F2B9686814A}.Release|Any CPU.ActiveCfg = Release|Any CPU

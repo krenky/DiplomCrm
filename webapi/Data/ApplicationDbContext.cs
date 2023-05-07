@@ -15,13 +15,6 @@ namespace webapi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            modelBuilder.Entity<IdentityRole>().HasData(
-                                                        new IdentityRole(Role.Administrator.ToString()),
-                                                        new IdentityRole(Role.ServiceManager.ToString()),
-                                                        new IdentityRole(Role.Technician.ToString()),
-                                                        new IdentityRole(Role.ITSupport.ToString()),
-                                                        new IdentityRole(Role.Executive.ToString()));
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<webapi.Models.Customer> Customer { get; set; } = default!;

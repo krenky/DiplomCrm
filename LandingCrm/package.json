@@ -18,6 +18,8 @@
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@fontsource/inter": "^4.5.15",
+    "@uselessdev/datepicker": "^2.7.0",
+    "chakra-ui-date-input": "^1.0.0",
     "framer-motion": "^10.12.8",
     "fusion-plugin-react-helmet-async": "^2.6.6",
     "react": "^18.2.0",

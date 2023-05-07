@@ -116,14 +116,7 @@ export const App = () => {
     <Layout>
       <Box bg="gray.50">
         <HeroSection />
-        <Container maxW="container.xl">
-
-          <Center p={[0, 10]}>
-            <video playsInline autoPlay muted poster={posterBil} loop>
-              <source src={video} type="video/webm" />
-            </video>
-          </Center>
-        </Container>
+        
         <Container maxW="container.2xl" centerContent py={[20]}>
           <text color="gray.600" fontSize="lg">
           Used by teams worldwide

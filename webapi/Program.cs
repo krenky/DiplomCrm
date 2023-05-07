@@ -116,4 +116,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+
 app.Run();

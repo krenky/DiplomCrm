@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
-using webapi.Interfase;
+using webapi.Interfaсe;
 using webapi.Models;
 using webapi.Models.Authenticate;
 

@@ -55,6 +55,7 @@ export default function HeroSection() {
         })
         .then((data) => {
             console.log(data);
+            onClose();
         })
         .catch((err) => {
             console.log(err.message);
@@ -154,12 +155,4 @@ export default function HeroSection() {
             </Center>
         </Container>
     );
-}
-function onSaveOrder(){
-    fetch(`https://localhost:7270/`,{
-        method: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({firstName: FirstName})
-    })
-    .then()
 }

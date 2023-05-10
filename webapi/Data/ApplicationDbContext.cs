@@ -21,5 +21,6 @@ namespace webapi.Data
         public DbSet<webapi.Models.Device> Device { get; set; } = default!;
         public DbSet<webapi.Models.InventoryItem> InventoryItem { get; set; } = default!;
         public DbSet<webapi.Models.RepairOrder> RepairOrder { get; set; } = default!;
+        public DbSet<EmailMessage> EmailMessages { get; set; } = default!;
     }
 }

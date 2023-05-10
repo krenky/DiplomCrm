@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using webapi.Models;
 using webapi.Models.Authenticate;
 
-namespace webapi.Interfase
+namespace webapi.Interfaсe
 {
     public interface IAuthenticateService
     {

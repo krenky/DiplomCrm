@@ -1,3 +1,4 @@
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -5,9 +6,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using webapi.Data;
-using webapi.Interfase;
+using webapi.Interfañe;
 using webapi.Models;
 using webapi.Services;
+using webapi.Services.BackgroundServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +18,21 @@ string connection = builder.Configuration.GetConnectionString("DefaultConnection
 // Add services to the container.
 #region DI
 builder.Services.AddScoped<IAuthenticateService, AuthenticateService>();
-
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ISmtpClient, SmtpClient>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IEmailMessageService, EmailMessageService>();
+builder.Services.AddScoped<ISmtpClient, SmtpClient>();
+builder.Services.AddSingleton<IStartStopCheckBirtdayService, CheckBirthdayBoyService>();
+builder.Services.AddSingleton<IStartStopSenderEmail, SenderEmailService>();
+//builder.Services.Addho
 #endregion
+
+#region
+builder.Services.AddHostedService <CheckBirthdayBoyService>();
+builder.Services.AddHostedService<SenderEmailService>();
+#endregion
+
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connection));
@@ -115,5 +130,8 @@ app.UseAuthorization();
 
 
 app.MapControllers();
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
 
 app.Run();

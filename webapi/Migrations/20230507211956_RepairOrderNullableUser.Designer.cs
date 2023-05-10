@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using webapi.Data;
@@ -11,9 +12,11 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230507211956_RepairOrderNullableUser")]
+    partial class RepairOrderNullableUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,37 +289,6 @@ namespace webapi.Migrations
                     b.ToTable("Device");
                 });
 
-            modelBuilder.Entity("webapi.Models.EmailMessage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Destination")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsSend")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EmailMessages");
-                });
-
             modelBuilder.Entity("webapi.Models.InventoryItem", b =>
                 {
                     b.Property<int>("Id")
@@ -461,7 +433,7 @@ namespace webapi.Migrations
                         .WithMany("RepairOrders")
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("webapi.Models.Customer", null)
+                    b.HasOne("webapi.Models.Customer", "Customer")
                         .WithMany("RepairOrders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -472,6 +444,8 @@ namespace webapi.Migrations
                         .HasForeignKey("DeviceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Customer");
 
                     b.Navigation("Device");
                 });

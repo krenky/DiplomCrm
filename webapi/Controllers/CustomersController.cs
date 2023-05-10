@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webapi.Data;
+using webapi.Interfaсe;
 using webapi.Models;
 
 namespace webapi.Controllers
@@ -10,70 +11,67 @@ namespace webapi.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly ICustomerService customerService;
 
-        public CustomersController(ApplicationDbContext context)
+        public CustomersController(ApplicationDbContext context, ICustomerService service)
         {
             _context = context;
+            customerService = service;
         }
 
         // GET: api/Customers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomer()
         {
-          if (_context.Customer == null)
-          {
-              return NotFound();
-          }
-            return await _context.Customer.ToListAsync();
+            try
+            {
+                return await customerService.GetCustomers();
+            }
+            catch(Exception ex)
+            {
+                return NoContent();
+            }
         }
 
         // GET: api/Customers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
-          if (_context.Customer == null)
-          {
-              return NotFound();
-          }
-            var customer = await _context.Customer.FindAsync(id);
-
-            if (customer == null)
+            try
             {
-                return NotFound();
+                return await customerService.GetCustomer(id);
             }
-
-            return customer;
+            catch(ArgumentException ex)
+            {
+                NotFound();
+                throw ex;
+            };
         }
 
         // PUT: api/Customers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, Customer customer)
+        public async Task<ActionResult<Customer>> PutCustomer(int id, Customer customer)
         {
-            if (id != customer.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(customer).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                customer.Id = id;
+                return await customerService.ChangeCustomer(customer);
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest();
+                throw;
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CustomerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest();
+                throw;
             }
-
-            return NoContent();
+            catch (Exception)
+            {
+                return NotFound();
+            }
         }
 
         // POST: api/Customers
@@ -81,34 +79,37 @@ namespace webapi.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-          if (_context.Customer == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Customer'  is null.");
-          }
-            _context.Customer.Add(customer);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCustomer", new { id = customer.Id }, customer);
+            try
+            {
+                Customer addingCustomer = await customerService.AddCustomer(customer);
+                return Ok(addingCustomer);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+                throw;
+                
+            }
         }
 
         // DELETE: api/Customers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
-            if (_context.Customer == null)
+            try
             {
-                return NotFound();
+                await customerService.DeleteCustomer(id);
+                return Ok();
             }
-            var customer = await _context.Customer.FindAsync(id);
-            if (customer == null)
+            catch (ArgumentException)
             {
-                return NotFound();
+                return NotFound(id);
             }
-
-            _context.Customer.Remove(customer);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception)
+            {
+                return BadRequest();
+                throw;
+            }
         }
 
         private bool CustomerExists(int id)

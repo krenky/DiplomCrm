@@ -13,6 +13,7 @@ import { ContactAside } from './ContactAside';
 import { LogoField } from '../companies/LogoField';
 import { NotesIterator } from '../notes';
 import { Contact } from '../types';
+import { Customer } from '../types';
 
 export const ContactShow = () => (
     <ShowBase>

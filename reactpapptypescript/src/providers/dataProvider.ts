@@ -3,7 +3,7 @@ import { DataProvider, GetManyReferenceParams, GetManyReferenceResult, RaRecord,
 import Header from '../Header';
 import { string } from 'prop-types';
 
-const apiUrl = 'https://localhost:5001'; // your asp.net core API URL
+const apiUrl = 'https://localhost:7270/api'; // your asp.net core API URL
 
 const httpClient = (url: string, options: any = {}) => {
     if (!options.headers) {
@@ -47,7 +47,7 @@ const dataProvider: DataProvider = {
 
     getMany: (resource, params) => {
         const query = {
-            filter: JSON.stringify({ id: params.ids }),
+            filter: JSON.stringify({ Id: params.ids }),
         };
         const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
@@ -58,7 +58,7 @@ const dataProvider: DataProvider = {
         method: 'POST',
         body: JSON.stringify(params.data),
     }).then(({ json }) => ({
-        data: { ...params.data, id: json.id },
+        data: { ...params.data, Id: json.Id },
     })),
 
     update: (resource, params) => httpClient(`${apiUrl}/${resource}/${params.id}`, {
@@ -68,7 +68,7 @@ const dataProvider: DataProvider = {
 
     updateMany: (resource, params) => {
         const query = {
-            filter: JSON.stringify({ id: params.ids }),
+            filter: JSON.stringify({ Id: params.ids }),
         };
         return httpClient(`${apiUrl}/${resource}?${stringify(query)}`, {
             method: 'PUT',
@@ -82,7 +82,7 @@ const dataProvider: DataProvider = {
 
     deleteMany: (resource, params) => {
         const query = {
-            filter: JSON.stringify({ id: params.ids }),
+            filter: JSON.stringify({ Id: params.ids }),
         };
         return httpClient(`${apiUrl}/${resource}?${stringify(query)}`, {
             method: 'DELETE',
@@ -91,6 +91,6 @@ const dataProvider: DataProvider = {
     getManyReference: function <RecordType extends RaRecord = any>(): Promise<GetManyReferenceResult<RecordType>> {
         throw new Error('Function not implemented.');
     }
-};
+}
 
 export default dataProvider;

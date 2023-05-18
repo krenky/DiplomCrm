@@ -64,7 +64,7 @@ namespace webapi.Services
                 var token = new JwtSecurityToken(
                     issuer: configuration["JWT:ValidIssuer"],
                     audience: configuration["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddHours(3),
+                    expires: DateTime.UtcNow.AddHours(3),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );
@@ -80,6 +80,7 @@ namespace webapi.Services
                 throw new Exception("User already exists!");// return StatusCode(500, new { Status = "Error", Message = "User already exists!" });
             ApplicationUser user = new()
             {
+                PhoneNumber = model.PhoneNumber,
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username

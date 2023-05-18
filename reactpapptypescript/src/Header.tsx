@@ -7,12 +7,15 @@ const Header = () => {
     const location = useLocation();
 
     let currentPath = '/';
-    if (!!matchPath('/contacts/*', location.pathname)) {
-        currentPath = '/contacts';
-    } else if (!!matchPath('/companies/*', location.pathname)) {
-        currentPath = '/companies';
-    } else if (!!matchPath('/deals/*', location.pathname)) {
-        currentPath = '/deals';
+    if (!!matchPath('/customers/*', location.pathname)) {
+        currentPath = '/customers';
+    
+    // } else if (!!matchPath('/contacts/*', location.pathname)) {
+    //     currentPath = '/contacts';
+    // } else if (!!matchPath('/companies/*', location.pathname)) {
+    //     currentPath = '/companies';
+    // } else if (!!matchPath('/deals/*', location.pathname)) {
+    //     currentPath = '/deals';
     }
 
     return (
@@ -34,7 +37,7 @@ const Header = () => {
                             </Typography>
                         </Box>
                         <Box>
-                            <Tabs
+                            {/* <Tabs
                                 value={currentPath}
                                 aria-label="Navigation Tabs"
                                 indicatorColor="secondary"
@@ -45,8 +48,14 @@ const Header = () => {
                                     component={Link}
                                     to="/"
                                     value="/"
-                                />
+                                /> */}
                                 <Tab
+                                    label={'Клиенты'}
+                                    component={Link}
+                                    to="/customers"
+                                    value="/customers"
+                                />
+                                {/* <Tab
                                     label={'Контакты'}
                                     component={Link}
                                     to="/contacts"
@@ -64,7 +73,7 @@ const Header = () => {
                                     to="/deals"
                                     value="/deals"
                                 />
-                            </Tabs>
+                            </Tabs> */}
                         </Box>
                         <Box display="flex">
                             <LoadingIndicator

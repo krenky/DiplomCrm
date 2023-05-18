@@ -97,7 +97,7 @@ namespace webapi.Services
 
         public async Task<List<Customer>> GetBirthdayBoy()
         {
-            return _context.Customer.Where(x => x.Birthdate.Month == DateTime.Now.Month && x.Birthdate.Day == DateTime.Now.Day).ToList<Customer>();
+            return _context.Customer.Where(x => x.Birthdate.Month == DateTime.UtcNow.Month && x.Birthdate.Day == DateTime.UtcNow.Day).ToList<Customer>();
         }
         private bool CustomerExists(int id)
         {

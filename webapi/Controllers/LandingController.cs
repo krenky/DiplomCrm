@@ -36,14 +36,14 @@ namespace webapi.Controllers
                     LastName = registerCustomer.LastName,
                     Phone = "0",
                     Email = registerCustomer.Email,
-                    Address = registerCustomer.Address,
                     Birthdate = registerCustomer.Birtdate
                 }).Entity;
 
+                _context.SaveChanges();
                 Device device = _context.Device.Add(new Device()
                 {
                     Name = registerCustomer.PhoneModel,
-                    Manufacturer = "undef",
+                    Manufacturer = registerCustomer.Manufacturer,
                     ModelDevice = "undef",
                     SerialNumber = "undef"
                 }).Entity;
@@ -55,11 +55,14 @@ namespace webapi.Controllers
                     Device = device,
                     DeviceId = device.Id,
                     Description = registerCustomer.Comment,
-                    Created = DateTime.Now
+                    Created = DateTime.UtcNow,
+                    Updated = DateTime.UtcNow,
+                    StartedAt = DateTime.UtcNow,
+                    EndedAt = DateTime.MaxValue
                 }).Entity;
                 _context.SaveChanges();
 
-                await _emailService.SendEmailAsync("nazaroff.serezha2014@yandex.ru", "sdf", $"Номер вашей заявки: {repairOrder.Id}");
+                await _emailService.SendEmailAsync(customer.Email, "sdf", $"Номер вашей заявки: {repairOrder.Id}");
 
                 return customer;
             }

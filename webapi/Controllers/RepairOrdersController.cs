@@ -24,7 +24,7 @@ namespace webapi.Controllers
           {
               return NotFound();
           }
-            return await _context.RepairOrder.ToListAsync();
+            return await _context.RepairOrder.Include(x => x.Device).ToListAsync();
         }
 
         // GET: api/RepairOrders/5
@@ -35,7 +35,7 @@ namespace webapi.Controllers
           {
               return NotFound();
           }
-            var repairOrder = await _context.RepairOrder.FindAsync(id);
+            var repairOrder = _context.RepairOrder.Include(x => x.Device).First(x => x.Id == id);
 
             if (repairOrder == null)
             {
@@ -50,12 +50,15 @@ namespace webapi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRepairOrder(int id, RepairOrder repairOrder)
         {
-            if (id != repairOrder.Id)
-            {
-                return BadRequest();
-            }
+            //if (id != repairOrder.Id)
+            //{
+            //    return BadRequest();
+            //}
+            RepairOrder order = _context.RepairOrder.Find(id);
+            CopyValues<RepairOrder>(order, repairOrder);
+            repairOrder.Id = id;
 
-            _context.Entry(repairOrder).State = EntityState.Modified;
+            _context.Entry(order).State = EntityState.Modified;
 
             try
             {
@@ -114,6 +117,22 @@ namespace webapi.Controllers
         private bool RepairOrderExists(int id)
         {
             return (_context.RepairOrder?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+        public void CopyValues<T>(T target, T source)
+        {
+            Type t = typeof(T);
+
+            var properties = t.GetProperties().Where(prop => prop.CanRead && prop.CanWrite && prop.Name != "Id");
+
+            foreach (var prop in properties)
+            {
+                var value = prop.GetValue(source, null);
+                if (value is int)
+                    if ((int)value == 0)
+                        continue;
+                if (value != null)
+                    prop.SetValue(target, value, null);
+            }
         }
     }
 }

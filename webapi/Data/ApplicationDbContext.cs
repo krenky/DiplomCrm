@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using webapi.Models;
+using webapi.Utils;
 
 namespace webapi.Data
 {
@@ -11,10 +12,11 @@ namespace webapi.Data
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-
+            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyUtcDateTimeConverter();
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<webapi.Models.Customer> Customer { get; set; } = default!;

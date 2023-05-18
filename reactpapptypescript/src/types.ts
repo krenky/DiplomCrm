@@ -68,3 +68,53 @@ export interface Tag extends RaRecord {
     name: string;
     color: string;
 }
+export interface Customer extends RaRecord{
+    first_name: string;
+    last_name: string;
+    email: string;
+    avatar?: string;
+    tags: Identifier[];
+    gender: string;
+    birthdate: Date;
+    phone: string;
+    repairOrders: RepairOrders[];
+}
+
+export interface RepairOrders extends RaRecord{
+    customerId: Identifier;
+    deviceId: number;
+    status: number;
+    description: string;
+    created: Date;
+    updated: Date;
+    partsUsed: InventoryItem[];
+    aspNetUserId: string;
+}
+
+export interface InventoryItem extends RaRecord{
+    name: string;
+    description: string;
+    price: number;
+    picture: string;
+    quantityInStock: number;
+}
+
+export interface Device extends RaRecord {
+    Name: string;
+    Manufacturer: string;
+    ModelDevice: string;
+    SerialNumber: string;
+}
+
+export enum Role{
+    Administrator,
+    ServiceManager,
+    Technician,
+    ITSupport,
+    Executive
+}
+
+export enum StatusRepair{
+    Success,
+    InWork
+}

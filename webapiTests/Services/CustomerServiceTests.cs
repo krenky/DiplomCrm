@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using webapi.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using webapi.Data;
 using webapi.Interfaсe;
 using webapi.Models;
 
-namespace webapi.Services.Tests
+namespace webapiTests.Services
 {
     [TestClass()]
     public class CustomerServiceTests

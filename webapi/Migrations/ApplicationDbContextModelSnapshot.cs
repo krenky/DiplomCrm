@@ -154,6 +154,21 @@ namespace webapi.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("RepairOrderRepairService", b =>
+                {
+                    b.Property<int>("repairOrdersId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("repairServicesId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("repairOrdersId", "repairServicesId");
+
+                    b.HasIndex("repairServicesId");
+
+                    b.ToTable("RepairOrderRepairService", (string)null);
+                });
+
             modelBuilder.Entity("webapi.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -230,7 +245,6 @@ namespace webapi.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Birthdate")
@@ -254,7 +268,7 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customer", (string)null);
                 });
 
             modelBuilder.Entity("webapi.Models.Device", b =>
@@ -283,7 +297,7 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Device");
+                    b.ToTable("Device", (string)null);
                 });
 
             modelBuilder.Entity("webapi.Models.EmailMessage", b =>
@@ -314,7 +328,7 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmailMessages");
+                    b.ToTable("EmailMessages", (string)null);
                 });
 
             modelBuilder.Entity("webapi.Models.InventoryItem", b =>
@@ -350,7 +364,7 @@ namespace webapi.Migrations
 
                     b.HasIndex("RepairOrderId");
 
-                    b.ToTable("InventoryItem");
+                    b.ToTable("InventoryItem", (string)null);
                 });
 
             modelBuilder.Entity("webapi.Models.RepairOrder", b =>
@@ -362,9 +376,6 @@ namespace webapi.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ApplicationUserId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AspNetUserId")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Created")
@@ -380,6 +391,12 @@ namespace webapi.Migrations
                     b.Property<int>("DeviceId")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("EndedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("StartedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
@@ -394,7 +411,31 @@ namespace webapi.Migrations
 
                     b.HasIndex("DeviceId");
 
-                    b.ToTable("RepairOrder");
+                    b.ToTable("RepairOrder", (string)null);
+                });
+
+            modelBuilder.Entity("webapi.Models.RepairService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RepairService", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -444,6 +485,21 @@ namespace webapi.Migrations
                     b.HasOne("webapi.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RepairOrderRepairService", b =>
+                {
+                    b.HasOne("webapi.Models.RepairOrder", null)
+                        .WithMany()
+                        .HasForeignKey("repairOrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("webapi.Models.RepairService", null)
+                        .WithMany()
+                        .HasForeignKey("repairServicesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

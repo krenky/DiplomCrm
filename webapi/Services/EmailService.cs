@@ -39,12 +39,12 @@ namespace webapi.Services
             {
                 Text = message
             };
-
+            await smtpClient.DisconnectAsync(false);
             await ConnectAsync();
 
             await smtpClient.SendAsync(emailMessage);
 
-            await smtpClient.DisconnectAsync(true);
+            await smtpClient.DisconnectAsync(false);
         }
         public async Task SendEmailAsync(EmailMessage emailMessage)
         {

@@ -13,6 +13,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+    Select,
     Text,
     VStack,
     useDisclosure,
@@ -34,32 +35,34 @@ export default function HeroSection() {
     const [Birthdate, setBirthdate] = useState<Date>(new Date(Date.now()));
     const [PhoneModel, setPhoneModel] = useState("PhoneModel");
     const [Comment, setComment] = useState("Comment");
+    const [Manufacturer, setManufacturer] = useState("Comment");
 
-    const save = function onSaveOrder(){
-        fetch(`https://localhost:7270/api/landing/Landing`,{
+    const save = function onSaveOrder() {
+        fetch(`https://localhost:7270/api/landing/Landing`, {
             method: "POST",
-            headers: { 'Content-Type': 'application/json',
-                        'accept': 'text/plain',
-                        'Access-Control-Allow-Origin': '*' },
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': 'text/plain',
+                'Access-Control-Allow-Origin': '*'
+            },
             body: JSON.stringify({
                 id: '0',
                 firstName: FirstName,
                 lastName: LastName,
                 phone: '0',
                 email: Email,
-                address: Address,
                 birthdate: Birthdate,
                 phoneModel: PhoneModel,
                 comment: Comment
             })
         })
-        .then((data) => {
-            console.log(data);
-            onClose();
-        })
-        .catch((err) => {
-            console.log(err.message);
-         });
+            .then((data) => {
+                console.log(data);
+                onClose();
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
     }
 
     return (
@@ -98,26 +101,20 @@ export default function HeroSection() {
                                 <ModalBody pb={6}>
                                     <FormControl>
                                         <FormLabel>Имя</FormLabel>
-                                        <Input placeholder='Сергей' name="FirstName" 
-                                        onBlur={evt => setFirstName(evt.target.value)}/>
+                                        <Input placeholder='Сергей' name="FirstName"
+                                            onBlur={evt => setFirstName(evt.target.value)} />
                                     </FormControl>
 
                                     <FormControl mt={4}>
                                         <FormLabel>Фамилия</FormLabel>
-                                        <Input placeholder='Назаров' name="LastName" 
-                                        onBlur={evt => setLastName(evt.target.value)}/>
+                                        <Input placeholder='Назаров' name="LastName"
+                                            onBlur={evt => setLastName(evt.target.value)} />
                                     </FormControl>
                                     <FormControl mt={4}>
                                         <FormLabel>email</FormLabel>
                                         <Input placeholder='nazaroff.serezha2014@gmail.com'
-                                        name="Email"
-                                        onBlur={evt => setEmail(evt.target.value)}/>
-                                    </FormControl>
-                                    <FormControl mt={4}>
-                                        <FormLabel>Адресс</FormLabel>
-                                        <Input placeholder='Казань Чистопльская 40\50' 
-                                        name="Address" 
-                                        onBlur={evt => setAddress(evt.target.value)}/>
+                                            name="Email"
+                                            onBlur={evt => setEmail(evt.target.value)} />
                                     </FormControl>
                                     <FormControl mt={4}>
                                         <FormLabel>День рождения</FormLabel>
@@ -130,20 +127,33 @@ export default function HeroSection() {
                                         />
                                     </FormControl>
                                     <FormControl mt={4}>
+                                        <FormLabel>Производитель</FormLabel>
+                                        <Select placeholder='Select option' onBlur={evt => setManufacturer(evt.target.value)}>
+                                            <option value='Apple'>Apple</option>
+                                            <option value='Samsung'>Samsung</option>
+                                            <option value='Meizu'>Meizu</option>
+                                            <option value='OnePlus'>OnePlus</option>
+                                            <option value='Oppo'>Oppo</option>
+                                            <option value='Sony'>Sony</option>
+                                            <option value='Yotaphone'>Yotaphone</option>
+                                            <option value='Asus'>Asus</option>
+                                        </Select>
+                                    </FormControl>
+                                    <FormControl mt={4}>
                                         <FormLabel>Модель смартфона</FormLabel>
                                         <Input placeholder='iphone s6' name="PhoneModel"
-                                        onBlur={evt => setPhoneModel(evt.target.value)} />
+                                            onBlur={evt => setPhoneModel(evt.target.value)} />
                                     </FormControl>
                                     <FormControl mt={4}>
                                         <FormLabel>Опишите поломку</FormLabel>
                                         <Input placeholder='Комментарий' name="Comment"
-                                        onBlur={evt => setComment(evt.target.value)} />
+                                            onBlur={evt => setComment(evt.target.value)} />
                                     </FormControl>
                                 </ModalBody>
 
                                 <ModalFooter>
                                     <Button colorScheme='blue' mr={3}
-                                    onClick={save}>
+                                        onClick={save}>
                                         Save
                                     </Button>
                                     <Button onClick={onClose}>Cancel</Button>

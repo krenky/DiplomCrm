@@ -34,13 +34,20 @@ namespace webapi.Services.BackgroundServices
             _logger.LogInformation("Сервис рассылки почты начал работать");
             while (!stoppingToken.IsCancellationRequested)
             {
-                List<EmailMessage> emailMessages = await _emailMessageService.GetUnSendEmailMessages();
-                foreach(EmailMessage message in emailMessages)
+                try
                 {
-                    _emailService.SendEmailAsync(message);
+                    List<EmailMessage> emailMessages = await _emailMessageService.GetUnSendEmailMessages();
+                    foreach (EmailMessage message in emailMessages)
+                    {
+                        await _emailService.SendEmailAsync(message);
+                    }
+                    _logger.LogInformation($"Отправлено {emailMessages.Count} писем");
+                    await Task.Delay(_interval, stoppingToken);
                 }
-                _logger.LogInformation($"Отправлено {emailMessages.Count} писем");
-                await Task.Delay(_interval, stoppingToken);
+                catch(Exception ex)
+                {
+                    //_logger.LogError(ex,"неудачная оправка письма");
+                }
             }
         }
 

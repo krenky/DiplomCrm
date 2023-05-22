@@ -42,7 +42,7 @@ export interface RepairOrder {
 }
 
 export interface InventoryItem {
-    Id: number;
+    Id?: number;
     name: string;
     description: string;
     price: number;

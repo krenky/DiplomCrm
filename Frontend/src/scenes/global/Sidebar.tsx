@@ -18,6 +18,7 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import AddIcon from '@mui/icons-material/Add';
+import InventoryIcon from '@mui/icons-material/Inventory';
 //#endregion
 
 interface ItemProps {
@@ -155,6 +156,8 @@ const SideBar: React.FC = () => {
                         <MenuItem component={<Link to="/repairorders" />} icon={<ReceiptOutlinedIcon />}>Заявки</MenuItem>
                         <MenuItem component={<Link to="/сustomers" />} icon={<ContactsOutlinedIcon />}>Клиенты</MenuItem>
                         <MenuItem component={<Link to="/сustomers/add" />} icon={<AddIcon />}>Регистр. клиентов</MenuItem>
+                        <MenuItem component={<Link to="/Inventory" />} icon={<InventoryIcon />}>Материалы</MenuItem>
+                        <MenuItem component={<Link to="/Inventory/add" />} icon={<AddIcon />}>Добавить материалы</MenuItem>
                         <Item
                             title="Contacts Information"
                             to="/contacts"

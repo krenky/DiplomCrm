@@ -20,6 +20,7 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import AddIcon from '@mui/icons-material/Add';
 import dataProvider from "../../providers/dataProvider";
 import { getIdentity } from "../../providers/authProvider";
+import InventoryIcon from '@mui/icons-material/Inventory';
 //#endregion
 
 interface ItemProps {
@@ -205,6 +206,27 @@ const SideBar: React.FC = () => {
                         >
                             -
                         </Typography>
+                        <MenuItem component={<Link to="/team" />} icon={<PeopleOutlinedIcon />}>Сотрудники</MenuItem>
+                        <MenuItem component={<Link to="/team/add" />} icon={<AddIcon />}>Регистр. сотрдника</MenuItem>
+                        <MenuItem component={<Link to="/calendar" />} icon={<CalendarTodayOutlinedIcon />}>Календарь</MenuItem>
+                        <MenuItem component={<Link to="/repairorders" />} icon={<ReceiptOutlinedIcon />}>Заявки</MenuItem>
+                        <MenuItem component={<Link to="/сustomers" />} icon={<ContactsOutlinedIcon />}>Клиенты</MenuItem>
+                        <MenuItem component={<Link to="/сustomers/add" />} icon={<AddIcon />}>Регистр. клиентов</MenuItem>
+                        <Item
+                            title="Contacts Information"
+                            to="/contacts"
+                            icon={<ContactsOutlinedIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
+                            title="Invoices Balances"
+                            to="/invoices"
+                            icon={<ReceiptOutlinedIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+
                         <Typography
                             variant="h6"
                             color={colors.grey[300]}

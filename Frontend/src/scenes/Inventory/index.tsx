@@ -2,18 +2,18 @@ import { Box, Button, IconButton, useTheme } from "@mui/material"
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { ApplicationUser, Customer } from "../../Type";
+import { ApplicationUser, InventoryItem } from "../../Type";
 import { DataProvider } from '../../providers/dataProvider';
 import { useEffect, useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
-import Form from "../form";
+import Form from "../InventoryForm";
 import React from "react";
-import {ModalForm} from '../form/index'
+import {ModalForm} from '../InventoryForm/index'
 
 
 
 
-const CustomerList: React.FC = () => {
+const InventoryList: React.FC = () => {
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -25,42 +25,47 @@ const CustomerList: React.FC = () => {
 
     const [open, setOpen] = React.useState(false);
 
-    const nullArray: Customer[] = [];
+    const nullArray: InventoryItem[] = [];
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const columns: GridColDef<Customer>[] = [
-        { field: "Id", headerName: "ID" },
+    const columns: GridColDef<InventoryItem>[] = [
         {
-            field: "firstName",
-            headerName: "Имя",
+            field: "name",
+            headerName: "Название",
             flex: 1,
             cellClassName: "name-column--cell"
         },
         {
-            field: "lastName",
-            headerName: "Фамилия",
+            field: "description",
+            headerName: "Описание",
             flex: 1,
             cellClassName: "name-column--cell"
         },
         {
-            field: "email", 
-            headerName: "Почта",
+            field: "price", 
+            headerName: "Цена (руб.)",
             flex: 1,
         },
         {
-            field: "phoneNumber", headerName: "Номер телефона",
+            field: "picture", 
+            headerName: "Фото",
+            flex: 1,
+        },
+        {
+            field: "quantityInStock", 
+            headerName: "Остаток",
             flex: 1,
         },
     ];
     const dataProvider = new DataProvider('https://localhost:7270/api');
 
-    const [users, setUsers] = useState<Customer[]>([]);
+    const [users, setUsers] = useState<InventoryItem[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await dataProvider.getList<Customer>('Customers');
+                const data = await dataProvider.getList<InventoryItem>('InventoryItems');
                 setUsers(data.data || []);
             } catch (error) {
                 console.error(error);
@@ -74,7 +79,7 @@ const CustomerList: React.FC = () => {
 
     return (
         <Box m={"20px"}>
-            <Header title="Клиенты" subtitle="клиенты" />
+            <Header title="Материалы" subtitle="на складе" />
             <Box display="flex" flex={1}>
                 <IconButton onClick={handleClickOpen}>
                     <AddIcon />
@@ -120,4 +125,4 @@ const CustomerList: React.FC = () => {
     );
 }
 
-export default CustomerList
+export default InventoryList

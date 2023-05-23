@@ -13,6 +13,8 @@ import RepairOrderForRouteView, { RepairOrderFormik } from './scenes/repairOrder
 import CustomerList from './scenes/customer';
 import RegisterCustomer from './scenes/registerCustomer/indes';
 import LoginPage from './pages/loginPage';
+import InventoryList from './scenes/Inventory'
+import InventoryAdd from './scenes/InventoryForm';
 // import RepairOrder from './scenes/repairOrder'
 // import Customer from './scenes/customer'
 // import InventoryItem from './scenes/inventoryItem'
@@ -40,6 +42,8 @@ function App() {
               <Route path='/сustomers/add' element={<RegisterCustomer />} />
               <Route path='/test' element={<KanbanBoard />} />
               <Route path='/login' element={<LoginPage />} />
+              <Route path='/Inventory' element={<InventoryList />}/>
+              <Route path='/Inventory/add' element={<InventoryAdd />}/>
             </Routes>
           </main>
         </div>

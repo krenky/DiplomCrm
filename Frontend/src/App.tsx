@@ -8,16 +8,18 @@ import SideBar from './scenes/global/Sidebar'
 import Team from './scenes/team'
 import Form from './scenes/form';
 import Calendar from './scenes/calendar';
-import GenericKanban from './scenes/kanban';
+import GenericKanban, { KanbanBoard } from './scenes/kanban';
 import RepairOrderForRouteView, { RepairOrderFormik } from './scenes/repairOrder';
 import CustomerList from './scenes/customer';
 import RegisterCustomer from './scenes/registerCustomer/indes';
+import LoginPage from './pages/loginPage';
 // import RepairOrder from './scenes/repairOrder'
 // import Customer from './scenes/customer'
 // import InventoryItem from './scenes/inventoryItem'
 
 function App() {
   const [theme, colorMode] = useMode();
+  
 
   return (
     <ColorModeContext.Provider value={colorMode} >
@@ -27,16 +29,17 @@ function App() {
           <SideBar />
           <main className='content'>
             <Topbar />
-
             <Routes>
               <Route path='/' element={<Dashboard />} />
               <Route path='/team' element={<Team />} />
               <Route path='/team/add' element={<Form />} />
               <Route path='/calendar' element={<Calendar />} />
-              <Route path='/repairorders' element={<GenericKanban />}/>
-              <Route path='/repairorders/:id' element={<RepairOrderFormik/>}/>
-              <Route path='/сustomers' element={<CustomerList />}/>
-              <Route path='/сustomers/add' element={<RegisterCustomer />}/>
+              <Route path='/repairorders' element={<KanbanBoard />} />
+              <Route path='/repairorders/:id' element={<RepairOrderFormik />} />
+              <Route path='/сustomers' element={<CustomerList />} />
+              <Route path='/сustomers/add' element={<RegisterCustomer />} />
+              <Route path='/test' element={<KanbanBoard />} />
+              <Route path='/login' element={<LoginPage />} />
             </Routes>
           </main>
         </div>

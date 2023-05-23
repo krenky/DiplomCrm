@@ -26,9 +26,9 @@ export interface RegisterModel {
 
 export interface RepairOrder {
     id?: string;
-    customerId?: number;
-    customer?:Customer
-    deviceId?: number;
+    customerId?: string;
+    customer?: Customer
+    deviceId?: string;
     status: StatusRepair;
     description: string;
     created: Date;
@@ -39,10 +39,12 @@ export interface RepairOrder {
     partsUsed?: InventoryItem[];
     applicationUserId?: string;
     applicationUser?: ApplicationUser;
+    price: number;
+    loyaltyDiscount:boolean;
 }
 
 export interface InventoryItem {
-    Id: number;
+    id: string;
     name: string;
     description: string;
     price: number;
@@ -52,10 +54,18 @@ export interface InventoryItem {
 
 export interface Device {
     Id: number;
-    Name: string;
-    Manufacturer: string;
-    ModelDevice: string;
-    SerialNumber: string;
+    name: string;
+    manufacturer: string;
+    modelDevice: string;
+    serialNumber: string;
+}
+
+export interface RepairWork {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    //repairOrders: RepairOrder[];
 }
 
 export enum Role {

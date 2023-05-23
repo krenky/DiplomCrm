@@ -48,7 +48,7 @@ namespace webapi.Controllers
                     SerialNumber = "undef"
                 }).Entity;
 
-                repairOrder = _context.RepairOrder.Add(new RepairOrder()
+                repairOrder = _context.RepairOrders.Add(new RepairOrder()
                 {
                     //Customer = customer,
                     CustomerId = customer.Id,

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using webapi.Data;
@@ -11,9 +12,11 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230522095516_AddPrice")]
+    partial class AddPrice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace webapi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("InventoryItemRepairOrder", b =>
-                {
-                    b.Property<int>("PartsUsedId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("repairOrdersId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("PartsUsedId", "repairOrdersId");
-
-                    b.HasIndex("repairOrdersId");
-
-                    b.ToTable("InventoryItemRepairOrder");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -372,7 +360,12 @@ namespace webapi.Migrations
                     b.Property<int>("QuantityInStock")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("RepairOrderId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RepairOrderId");
 
                     b.ToTable("InventoryItem");
                 });
@@ -451,21 +444,6 @@ namespace webapi.Migrations
                     b.ToTable("RepairWorks");
                 });
 
-            modelBuilder.Entity("InventoryItemRepairOrder", b =>
-                {
-                    b.HasOne("webapi.Models.InventoryItem", null)
-                        .WithMany()
-                        .HasForeignKey("PartsUsedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("webapi.Models.RepairOrder", null)
-                        .WithMany()
-                        .HasForeignKey("repairOrdersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -532,6 +510,13 @@ namespace webapi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("webapi.Models.InventoryItem", b =>
+                {
+                    b.HasOne("webapi.Models.RepairOrder", null)
+                        .WithMany("PartsUsed")
+                        .HasForeignKey("RepairOrderId");
+                });
+
             modelBuilder.Entity("webapi.Models.RepairOrder", b =>
                 {
                     b.HasOne("webapi.Models.ApplicationUser", "ApplicationUser")
@@ -563,6 +548,11 @@ namespace webapi.Migrations
             modelBuilder.Entity("webapi.Models.Customer", b =>
                 {
                     b.Navigation("RepairOrders");
+                });
+
+            modelBuilder.Entity("webapi.Models.RepairOrder", b =>
+                {
+                    b.Navigation("PartsUsed");
                 });
 #pragma warning restore 612, 618
         }

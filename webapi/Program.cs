@@ -29,8 +29,8 @@ builder.Services.AddSingleton<IStartStopSenderEmail, SenderEmailService>();
 #endregion
 
 #region
-builder.Services.AddHostedService <CheckBirthdayBoyService>();
-builder.Services.AddHostedService<SenderEmailService>();
+//builder.Services.AddHostedService <CheckBirthdayBoyService>();
+//builder.Services.AddHostedService<SenderEmailService>();
 #endregion
 
 builder.Services.AddControllers();

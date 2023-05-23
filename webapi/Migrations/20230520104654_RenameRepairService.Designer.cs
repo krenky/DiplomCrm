@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using webapi.Data;
@@ -11,9 +12,11 @@ using webapi.Data;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230520104654_RenameRepairService")]
+    partial class RenameRepairService
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace webapi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("InventoryItemRepairOrder", b =>
-                {
-                    b.Property<int>("PartsUsedId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("repairOrdersId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("PartsUsedId", "repairOrdersId");
-
-                    b.HasIndex("repairOrdersId");
-
-                    b.ToTable("InventoryItemRepairOrder");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -174,12 +162,12 @@ namespace webapi.Migrations
                     b.Property<int>("repairOrdersId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("repairWorksId")
+                    b.Property<int>("repairServicesId")
                         .HasColumnType("integer");
 
-                    b.HasKey("repairOrdersId", "repairWorksId");
+                    b.HasKey("repairOrdersId", "repairServicesId");
 
-                    b.HasIndex("repairWorksId");
+                    b.HasIndex("repairServicesId");
 
                     b.ToTable("RepairOrderRepairWork");
                 });
@@ -372,7 +360,12 @@ namespace webapi.Migrations
                     b.Property<int>("QuantityInStock")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("RepairOrderId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RepairOrderId");
 
                     b.ToTable("InventoryItem");
                 });
@@ -404,9 +397,6 @@ namespace webapi.Migrations
                     b.Property<DateTime>("EndedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("LoyaltyDiscount")
-                        .HasColumnType("boolean");
-
                     b.Property<DateTime>("StartedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -424,7 +414,7 @@ namespace webapi.Migrations
 
                     b.HasIndex("DeviceId");
 
-                    b.ToTable("RepairOrders");
+                    b.ToTable("RepairOrder");
                 });
 
             modelBuilder.Entity("webapi.Models.RepairWork", b =>
@@ -448,22 +438,7 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RepairWorks");
-                });
-
-            modelBuilder.Entity("InventoryItemRepairOrder", b =>
-                {
-                    b.HasOne("webapi.Models.InventoryItem", null)
-                        .WithMany()
-                        .HasForeignKey("PartsUsedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("webapi.Models.RepairOrder", null)
-                        .WithMany()
-                        .HasForeignKey("repairOrdersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.ToTable("RepairWork");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -527,9 +502,16 @@ namespace webapi.Migrations
 
                     b.HasOne("webapi.Models.RepairWork", null)
                         .WithMany()
-                        .HasForeignKey("repairWorksId")
+                        .HasForeignKey("repairServicesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("webapi.Models.InventoryItem", b =>
+                {
+                    b.HasOne("webapi.Models.RepairOrder", null)
+                        .WithMany("PartsUsed")
+                        .HasForeignKey("RepairOrderId");
                 });
 
             modelBuilder.Entity("webapi.Models.RepairOrder", b =>
@@ -563,6 +545,11 @@ namespace webapi.Migrations
             modelBuilder.Entity("webapi.Models.Customer", b =>
                 {
                     b.Navigation("RepairOrders");
+                });
+
+            modelBuilder.Entity("webapi.Models.RepairOrder", b =>
+                {
+                    b.Navigation("PartsUsed");
                 });
 #pragma warning restore 612, 618
         }

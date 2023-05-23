@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import {
     Box,
     Button,
+    Checkbox,
     CircularProgress,
+    FormControlLabel,
     Paper,
     Table,
     TableBody,
@@ -17,21 +19,21 @@ import {
 
 } from '@mui/material';
 import { tokens } from '../../theme';
-import { Customer, RepairOrder, StatusRepair } from '../../Type';
-//import { getRepairOrder } from '../services/repairOrderService';
+import { Customer, Device, InventoryItem, RepairOrder, RepairWork, StatusRepair } from '../../Type';
 import { useParams } from 'react-router-dom';
-import { Formik } from 'formik';
+import { Field, FieldInputProps, Form, Formik } from 'formik';
 import * as yup from "yup";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { ruRU } from '@mui/x-date-pickers/locales';
 import dataProvider from '../../providers/dataProvider'
+import SelecField, { Option } from '../../components/SelectField';
+//import Option from 'react-select/lib/components/Option';
 
 interface RepairOrderViewProps {
     id: string;
 }
-
-//const dataProvider = new DataProvider('https://localhost:7270/api');
+interface multiSelect {
+    label: string,
+    value: string
+}
 
 const initialValues = {
     status: StatusRepair.InWork,
@@ -41,7 +43,15 @@ const initialValues = {
     created: new Date(Date.now()),
     updated: new Date(Date.now()),
     customerName: "",
-    deviceName: ""
+    deviceName: "",
+    allRepairWorks: [] as Option[],
+    repairWorks: [] as Option[],
+    price: 0,
+    loyaltyDiscount: false,
+    partsUsed: [] as Option[],
+    allPartsUsed: [] as Option[],
+    partUsedInventory: [] as InventoryItem[],
+    allPastUsedInventory: [] as InventoryItem[]
 }
 const userSchema = yup.object().shape({
     status: yup.string().required("required"),
@@ -60,9 +70,12 @@ const RepairOrderView = ({ id }: RepairOrderViewProps) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [repairOrder, setRepairOrder] = useState<RepairOrder | null>(null);
     const isNonMobile = useMediaQuery("(min-width:600px)");
+    const [order, setOrder] = useState<RepairOrder | null>(null);
+    const [device, setDevice] = useState<Device>();
     const handleForSumbit = (values: any) => {
         console.log(values)
     }
+
 
     useEffect(() => {
         dataProvider.getOne<RepairOrder>('repairorders', id)
@@ -77,12 +90,76 @@ const RepairOrderView = ({ id }: RepairOrderViewProps) => {
                     initialValues.endedAt = result.data.endedAt
                     initialValues.description = result.data.description
                     initialValues.status = result.data.status
-                    initialValues.customerName = customer.firstName || ' ' + ' ' + customer.lastName|| ' '
-                    initialValues.deviceName = result.data.device?.Name || ' '
+                    initialValues.price = result.data.price
+                    initialValues.loyaltyDiscount = result.data.loyaltyDiscount
+                    initialValues.partUsedInventory = result.data.partsUsed || [] as InventoryItem[]
+                    initialValues.partsUsed = result.data.partsUsed? result.data.partsUsed.map((item) => {
+                        const values: Option = {
+                            label: item.name.toString(),
+                            value: item.id.toString()
+                        }
+                        return values;
+                    }
+                    ):[] as Option[]
+
+                    if (result.data.device)
+                        initialValues.deviceName = result.data.device.manufacturer + ' ' + result.data.device.name || ' '
+
+                    dataProvider.getOne<Customer>('customers', result.data.customerId || '')
+                        .then((result) => {
+                            if (result.data)
+                                initialValues.customerName = result.data.firstName + ' ' + result.data.lastName || ' '
+                            dataProvider.getList<RepairWork>('repairworks')
+                                .then((result) => {
+                                    if (result.data)
+                                        initialValues.allRepairWorks = result.data.map((item) => {
+                                            const values: multiSelect = {
+                                                label: item.name.toString(),
+                                                value: item.id.toString()
+                                            }
+                                            return values;
+                                        }
+                                        )
+                                    dataProvider.getListWithId<RepairWork>('RepairOrders/RepairWork', id)
+                                        .then((result) => {
+                                            if (result.data)
+                                                initialValues.repairWorks = result.data.map((item) => {
+                                                    const values: Option = {
+                                                        label: item.name.toString(),
+                                                        value: item.id.toString()
+                                                    }
+                                                    return values;
+                                                }
+                                                )
+                                            dataProvider.getList<InventoryItem>('InventoryItems')
+                                                .then((result) => {
+                                                    if (result.data)
+                                                        initialValues.allPartsUsed = result.data.map((item) => {
+                                                            const values: Option = {
+                                                                label: item.name.toString(),
+                                                                value: item.id.toString()
+                                                            }
+                                                            return values;
+                                                        }
+                                                        )
+                                                        initialValues.allPastUsedInventory = result.data ||[] as InventoryItem[]
+                                                    setLoading(false);
+                                                })
+                                                .catch((error) => console.error(error))
+
+                                        })
+                                        .catch((error) => console.error(error))
+
+                                })
+                                .catch((error) => console.error(error));
+                        })
+                        .catch((error) => console.error(error));
                 }
-                setLoading(false);
+
             })
             .catch((error) => console.error(error));
+
+
     }, [id]);
 
     if (loading) {
@@ -105,7 +182,7 @@ const RepairOrderView = ({ id }: RepairOrderViewProps) => {
                     handleBlur,
                     handleChange,
                     handleSubmit, }) => (
-                    <form onSubmit={handleSubmit}>
+                    <Form onSubmit={handleSubmit}>
                         <Box
                             display="grid"
                             gap="30px"
@@ -201,7 +278,7 @@ const RepairOrderView = ({ id }: RepairOrderViewProps) => {
                                 value={values.customerName}
                                 name="customerName"
                                 error={!!touched.customerName && !!errors.customerName}
-                                helperText={touched.customerName||'' && errors.customerName}
+                                helperText={touched.customerName || '' && errors.customerName}
                                 sx={{ gridColumn: "span 2" }}
                             />
                             <TextField
@@ -213,8 +290,26 @@ const RepairOrderView = ({ id }: RepairOrderViewProps) => {
                                 value={values.deviceName}
                                 name="deviceName"
                                 error={!!touched.deviceName && !!errors.deviceName}
-                                helperText={touched.deviceName||'' && errors.deviceName}
+                                helperText={touched.deviceName || '' && errors.deviceName}
                                 sx={{ gridColumn: "span 2" }}
+                            />
+                            <TextField
+                                fullWidth
+                                type="text"
+                                label="Сумма"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.price}
+                                name="price"
+                                error={!!touched.price && !!errors.price}
+                                helperText={touched.price || '' && errors.price}
+                                sx={{ gridColumn: "span 2" }}
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={values.loyaltyDiscount} />}
+                                label="Скидка постоянного клиента"
+                                name="loyaltyDiscount"
+                                onChange={handleChange}
                             />
                             {/* <TextField
                                 fullWidth
@@ -228,6 +323,28 @@ const RepairOrderView = ({ id }: RepairOrderViewProps) => {
                                 //helperText={touched.endedAt.toString()||'' && errors.endedAt.toDateString()}
                                 sx={{ gridColumn: "span 2" }}
                             /> */}
+                            <Field
+                                fullWidth
+                                className="repairWorks"
+                                name="repairWorks"
+                                label="Список услуг"
+                                options={initialValues.allRepairWorks}
+                                component={SelecField}
+                                placeholder="Выберите услуги..."
+                                isMulti={true}
+                                value={initialValues.repairWorks}//field
+                            />
+                            <Field
+                                fullWidth
+                                className="partsUsed"
+                                name="partsUsed"
+                                label="Список запчастей"
+                                options={initialValues.allPartsUsed}
+                                component={SelecField}
+                                placeholder="Выберите запчасти..."
+                                isMulti={true}
+                                value={initialValues.partsUsed}//field
+                            />
                         </Box>
                         <Box display="flex" justifyContent="end" mt="20px">
                             <Button type="submit" color="secondary" variant="contained" onClick={() => {
@@ -237,14 +354,28 @@ const RepairOrderView = ({ id }: RepairOrderViewProps) => {
                                     startedAt: values.startedAt,
                                     endedAt: values.endedAt,
                                     created: values.created,
-                                    updated: values.updated
+                                    updated: values.updated,
+                                    price: values.price,
+                                    loyaltyDiscount: values.loyaltyDiscount,
+                                    partsUsed: values.allPastUsedInventory.filter((item) => values.partsUsed.findIndex((itemOption)=>itemOption.value === item.id) != -1),
+                                    // values.partsUsed.map((item)=> {
+                                    //     const value: InventoryItem = {
+                                    //         id: item.value,
+                                    //         name: '',
+                                    //         description: '',
+                                    //         price: 0,
+                                    //         quantityInStock: 0,
+                                    //         picture: ''
+                                    //     }
+                                    //     return value;
+                                    // } )
                                 }
                                 SaveRepairOrder(user, id);
                             }}>
                                 Сохранение данных
                             </Button>
                         </Box>
-                    </form>
+                    </Form>
                 )}
             </Formik>
         </Box>
@@ -269,6 +400,7 @@ function RepairOrderForRouteView() {
     const colors = tokens(theme.palette.mode);
     const [loading, setLoading] = useState<boolean>(true);
     const [repairOrder, setRepairOrder] = useState<RepairOrder | null>(null);
+    const [customer, setCustomer] = useState<Customer | null>(null);
 
     useEffect(() => {
         dataProvider.getOne<RepairOrder>('repairorders', id)
@@ -278,6 +410,7 @@ function RepairOrderForRouteView() {
                 setLoading(false);
             })
             .catch((error) => console.error(error));
+
     }, [id]);
 
     if (loading) {

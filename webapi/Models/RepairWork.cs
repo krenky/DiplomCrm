@@ -1,6 +1,6 @@
 ﻿namespace webapi.Models
 {
-    public class RepairService
+    public class RepairWork
     {
         public int Id { get; set; }
         public string Name { get; set; }

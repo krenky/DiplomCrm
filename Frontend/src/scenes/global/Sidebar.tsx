@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Sidebar, Menu, MenuItem, useProSidebar } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -18,6 +18,8 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import AddIcon from '@mui/icons-material/Add';
+import dataProvider from "../../providers/dataProvider";
+import { getIdentity } from "../../providers/authProvider";
 //#endregion
 
 interface ItemProps {
@@ -51,11 +53,23 @@ const SideBar: React.FC = () => {
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
     const [selected, setSelected] = useState<string>("Dashboard");
+    const [currentUser, setCurrentUser] = useState<{
+        id: string;
+        fullName: string;
+        email: string;
+    }>();
+
+    useEffect(() => {
+
+        getIdentity()
+            .then((value) => setCurrentUser(value))
+            .catch(/*() => document.location = 'http://localhost:5173/login'*/)
+    })
+
     const { collapseSidebar } = useProSidebar();
     function collapse() {
         setIsCollapsed(!isCollapsed);
         collapseSidebar(!isCollapsed);
-
     }
 
     return (
@@ -97,7 +111,7 @@ const SideBar: React.FC = () => {
                                 ml="15px"
                             >
                                 <Typography variant="h3" color={colors.grey[100]}>
-                                    ADMINIS
+                                    Меню
                                 </Typography>
                                 <IconButton onClick={() => collapse()}>
                                     <MenuOutlinedIcon />
@@ -124,116 +138,88 @@ const SideBar: React.FC = () => {
                                     fontWeight="bold"
                                     sx={{ m: "10px 0 0 0" }}
                                 >
-                                    Ed Roh
+                                    {currentUser ? currentUser.fullName : ''}
                                 </Typography>
-                                <Typography variant="h5" color={colors.greenAccent[500]}>
-                                    VP Fancy Admin
+                                <Typography variant="h5" color={colors.greenAccent[100]}>
+                                    Сергей Назаров
                                 </Typography>
+
                             </Box>
                         </Box>
                     )}
 
                     <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-                        <Item
-                            title="Dashboard"
-                            to="/"
-                            icon={<HomeOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
 
-                        <Typography
-                            variant="h6"
-                            color={colors.grey[300]}
-                            sx={{ m: "15px 0 5px 20px" }}
-                        >
-                            Data
-                        </Typography>
                         <MenuItem component={<Link to="/team" />} icon={<PeopleOutlinedIcon />}>Сотрудники</MenuItem>
                         <MenuItem component={<Link to="/team/add" />} icon={<AddIcon />}>Регистр. сотрдника</MenuItem>
                         <MenuItem component={<Link to="/calendar" />} icon={<CalendarTodayOutlinedIcon />}>Календарь</MenuItem>
                         <MenuItem component={<Link to="/repairorders" />} icon={<ReceiptOutlinedIcon />}>Заявки</MenuItem>
                         <MenuItem component={<Link to="/сustomers" />} icon={<ContactsOutlinedIcon />}>Клиенты</MenuItem>
                         <MenuItem component={<Link to="/сustomers/add" />} icon={<AddIcon />}>Регистр. клиентов</MenuItem>
-                        <Item
-                            title="Contacts Information"
-                            to="/contacts"
-                            icon={<ContactsOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-                        <Item
-                            title="Invoices Balances"
-                            to="/invoices"
-                            icon={<ReceiptOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
                         <Typography
                             variant="h6"
                             color={colors.grey[300]}
                             sx={{ m: "15px 0 5px 20px" }}
                         >
-                            Pages
+                            -
                         </Typography>
-                        <Item
-                            title="Profile Form"
-                            to="/form"
-                            icon={<PersonOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-                        <Item
-                            title="Calendar"
-                            to="/calendar"
-                            icon={<CalendarTodayOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-                        <Item
-                            title="FAQ Page"
-                            to="/faq"
-                            icon={<HelpOutlineOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-
                         <Typography
                             variant="h6"
                             color={colors.grey[300]}
                             sx={{ m: "15px 0 5px 20px" }}
                         >
-                            Charts
+                            -
                         </Typography>
-                        <Item
-                            title="Bar Chart"
-                            to="/bar"
-                            icon={<BarChartOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-                        <Item
-                            title="Pie Chart"
-                            to="/pie"
-                            icon={<PieChartOutlineOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-                        <Item
-                            title="Line Chart"
-                            to="/line"
-                            icon={<TimelineOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-                        <Item
-                            title="Geography Chart"
-                            to="/geography"
-                            icon={<MapOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
+                        <Typography
+                            variant="h6"
+                            color={colors.grey[300]}
+                            sx={{ m: "15px 0 5px 20px" }}
+                        >
+                            -
+                        </Typography>
+                        <Typography
+                            variant="h6"
+                            color={colors.grey[300]}
+                            sx={{ m: "15px 0 5px 20px" }}
+                        >
+                            -
+                        </Typography>
+                        <Typography
+                            variant="h6"
+                            color={colors.grey[300]}
+                            sx={{ m: "15px 0 5px 20px" }}
+                        >
+                            -
+                        </Typography>
+                        <Typography
+                            variant="h6"
+                            color={colors.grey[300]}
+                            sx={{ m: "15px 0 5px 20px" }}
+                        >
+                            -
+                        </Typography>
+                        <Typography
+                            variant="h6"
+                            color={colors.grey[300]}
+                            sx={{ m: "15px 0 5px 20px" }}
+                        >
+                            -
+                        </Typography>
+                        <Typography
+                            variant="h6"
+                            color={colors.grey[300]}
+                            sx={{ m: "15px 0 5px 20px" }}
+                        >
+                            -
+                        </Typography>
+                        <Typography
+                            variant="h6"
+                            color={colors.grey[300]}
+                            sx={{ m: "15px 0 5px 20px" }}
+                        >
+                            -
+                        </Typography>
+
                     </Box>
                 </Menu>
             </Sidebar>

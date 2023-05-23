@@ -57,6 +57,16 @@ export class DataProvider {
         return { data, total: data.length };
     }
 
+    async getListWithId<T>(resource: string,  id: string): Promise<DataProviderResponse<T[]>> {
+        const { data } = await this.request<T[]>({
+            method: 'get',
+            url: `/${resource}/${id}`,
+            //params
+        });
+
+        return { data, total: data.length };
+    }
+
     async getOne<T>(resource: string, id: string): Promise<DataProviderResponse<T>> {
         const { data } = await this.request<T>({
             method: 'get',

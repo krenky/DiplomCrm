@@ -20,22 +20,26 @@ namespace webapi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RepairOrder>>> GetRepairOrder()
         {
-          if (_context.RepairOrder == null)
+          if (_context.RepairOrders == null)
           {
               return NotFound();
           }
-            return await _context.RepairOrder.Include(x => x.Device).ToListAsync();
+            return await _context.RepairOrders.Include(x => x.Device).ToListAsync();
         }
 
         // GET: api/RepairOrders/5
         [HttpGet("{id}")]
         public async Task<ActionResult<RepairOrder>> GetRepairOrder(int id)
         {
-          if (_context.RepairOrder == null)
+          if (_context.RepairOrders == null)
           {
               return NotFound();
           }
-            var repairOrder = _context.RepairOrder.Include(x => x.Device).First(x => x.Id == id);
+            var repairOrder = _context.RepairOrders.Include(x => x.Device).First(x => x.Id == id);
+            var repairWork = _context.RepairWorks.Where(x => x.repairOrders.Contains(repairOrder)).ToList();
+            var inventoryItem = _context.InventoryItem.Where(x => x.repairOrders.Contains(repairOrder)).ToList();
+            repairOrder.repairWorks = repairWork;
+            repairOrder.PartsUsed = inventoryItem;
 
             if (repairOrder == null)
             {
@@ -43,6 +47,24 @@ namespace webapi.Controllers
             }
 
             return repairOrder;
+        }
+
+        [HttpGet("/api/RepairOrders/RepairWork/{repairOrderId}")]
+        public async Task<ActionResult<IEnumerable<RepairWork>>> GetRepairWorks(int repairOrderId)
+        {
+            if (_context.RepairWorks == null)
+            {
+                return NotFound();
+            }
+            var repairOrder = _context.RepairOrders.First(x => x.Id == repairOrderId);
+            var repairWork = _context.RepairWorks.Where(x => x.repairOrders.Contains(repairOrder)).ToList();
+            repairOrder.repairWorks = repairWork;
+            if (repairWork == null)
+            {
+                return NotFound();
+            }
+
+            return repairWork;
         }
 
         // PUT: api/RepairOrders/5
@@ -54,7 +76,7 @@ namespace webapi.Controllers
             //{
             //    return BadRequest();
             //}
-            RepairOrder order = _context.RepairOrder.Find(id);
+            RepairOrder order = _context.RepairOrders.Find(id);
             CopyValues<RepairOrder>(order, repairOrder);
             repairOrder.Id = id;
 
@@ -84,11 +106,11 @@ namespace webapi.Controllers
         [HttpPost]
         public async Task<ActionResult<RepairOrder>> PostRepairOrder(RepairOrder repairOrder)
         {
-          if (_context.RepairOrder == null)
+          if (_context.RepairOrders == null)
           {
               return Problem("Entity set 'ApplicationDbContext.RepairOrder'  is null.");
           }
-            _context.RepairOrder.Add(repairOrder);
+            _context.RepairOrders.Add(repairOrder);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetRepairOrder", new { id = repairOrder.Id }, repairOrder);
@@ -98,17 +120,17 @@ namespace webapi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRepairOrder(int id)
         {
-            if (_context.RepairOrder == null)
+            if (_context.RepairOrders == null)
             {
                 return NotFound();
             }
-            var repairOrder = await _context.RepairOrder.FindAsync(id);
+            var repairOrder = await _context.RepairOrders.FindAsync(id);
             if (repairOrder == null)
             {
                 return NotFound();
             }
 
-            _context.RepairOrder.Remove(repairOrder);
+            _context.RepairOrders.Remove(repairOrder);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -116,7 +138,7 @@ namespace webapi.Controllers
 
         private bool RepairOrderExists(int id)
         {
-            return (_context.RepairOrder?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.RepairOrders?.Any(e => e.Id == id)).GetValueOrDefault();
         }
         public void CopyValues<T>(T target, T source)
         {

@@ -23,9 +23,9 @@ import {
 import twitterLogo from '.././assets/twitter-logo.svg';
 
 const navLinks = [
-  { name: 'Домой', link: '/' },
+  { name: 'Главная', link: '/' },
   { name: 'Преимущества', link: '#features' },
-  { name: 'Цены', link: '#pricing' },
+  //{ name: 'Цены', link: '#pricing' },
 ]
 
 const DesktopSidebarContents = ({ name }: any) => {

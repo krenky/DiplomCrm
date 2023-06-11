@@ -120,7 +120,7 @@ const Form = () => {
                             }  
                             CreatUser(user);
                         }}>
-                            Create New User
+                            Регистрация
                         </Button>
                     </Box>
                 </form>

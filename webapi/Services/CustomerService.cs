@@ -8,10 +8,12 @@ namespace webapi.Services
     public class CustomerService : ICustomerService
     {
         private readonly ApplicationDbContext _context;
+        private readonly ICustomerHistoryService _customerHistoryService;
 
-        public CustomerService(ApplicationDbContext context)
+        public CustomerService(ApplicationDbContext context, ICustomerHistoryService customerHistoryService)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _customerHistoryService = customerHistoryService;
         }
 
         public async Task<Customer> AddCustomer(Customer customer)
@@ -22,6 +24,7 @@ namespace webapi.Services
             }
             Customer addingCustomer = _context.Customer.Add(customer).Entity;
             await _context.SaveChangesAsync();
+            _customerHistoryService.AddHistory(customer, actionHistory.Добавлен);
             
             return addingCustomer;
         }
@@ -34,7 +37,8 @@ namespace webapi.Services
             }
 
             _context.Entry(customer).State = EntityState.Modified;
-
+            //_context.customerHistories.Add(new CustomerHistory);
+            _customerHistoryService.AddHistory(customer, actionHistory.Изменен);
             try
             {
                 await _context.SaveChangesAsync();
@@ -68,6 +72,7 @@ namespace webapi.Services
 
             _context.Customer.Remove(customer);
             await _context.SaveChangesAsync();
+            _customerHistoryService.AddHistory(customer, actionHistory.Удален);
         }
 
         public async Task<Customer> GetCustomer(int id)
@@ -103,5 +108,7 @@ namespace webapi.Services
         {
             return (_context.Customer?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        
     }
 }

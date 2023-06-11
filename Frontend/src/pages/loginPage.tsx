@@ -36,13 +36,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type State = {
   username: string
-  password:  string
+  password: string
   isButtonDisabled: boolean
   helperText: string
   isError: boolean
 };
 
-const initialState:State = {
+const initialState: State = {
   username: '',
   password: '',
   isButtonDisabled: true,
@@ -59,34 +59,34 @@ type Action = { type: 'setUsername', payload: string }
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'setUsername': 
+    case 'setUsername':
       return {
         ...state,
         username: action.payload
       };
-    case 'setPassword': 
+    case 'setPassword':
       return {
         ...state,
         password: action.payload
       };
-    case 'setIsButtonDisabled': 
+    case 'setIsButtonDisabled':
       return {
         ...state,
         isButtonDisabled: action.payload
       };
-    case 'loginSuccess': 
+    case 'loginSuccess':
       return {
         ...state,
         helperText: action.payload,
         isError: false
       };
-    case 'loginFailed': 
+    case 'loginFailed':
       return {
         ...state,
         helperText: action.payload,
         isError: true
       };
-    case 'setIsError': 
+    case 'setIsError':
       return {
         ...state,
         isError: action.payload
@@ -94,16 +94,16 @@ const reducer = (state: State, action: Action): State => {
   }
 }
 
-const LoginPage:React.FC = () => {
+const LoginPage: React.FC = () => {
   const classes = useStyles();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (state.username.trim() && state.password.trim()) {
-     dispatch({
-       type: 'setIsButtonDisabled',
-       payload: false
-     });
+      dispatch({
+        type: 'setIsButtonDisabled',
+        payload: false
+      });
     } else {
       dispatch({
         type: 'setIsButtonDisabled',
@@ -114,25 +114,25 @@ const LoginPage:React.FC = () => {
 
   const handleLogin = () => {
     //logout()
-    try{
-    login(state.username, state.password);
-    checkAuth().then(()=>{
+    try {
+      login(state.username, state.password);
+      checkAuth().then(() => {
         dispatch({
-            type: 'loginSuccess',
-            payload: 'Login Successfully'
-          });
-    }).catch(()=>{
+          type: 'loginSuccess',
+          payload: 'Login Successfully'
+        });
+      }).catch(() => {
         dispatch({
-            type: 'loginFailed',
-            payload: 'Incorrect username or password'
-          });
-    })
+          type: 'loginFailed',
+          payload: 'Incorrect username or password'
+        });
+      })
     }
-    catch{
-        dispatch({
-            type: 'loginFailed',
-            payload: 'Incorrect username or password'
-          });
+    catch {
+      dispatch({
+        type: 'loginFailed',
+        payload: 'Incorrect username or password'
+      });
     }
 
     // if (state.username === 'abc@email.com' && state.password === 'password') {

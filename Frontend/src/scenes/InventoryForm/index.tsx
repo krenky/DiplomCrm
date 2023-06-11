@@ -124,6 +124,7 @@ const Form = () => {
                     <Box display="flex" justifyContent="end" mt="20px">
                         <Button type="submit" color="secondary" variant="contained" onClick={() => {
                             const InventoryItem: InventoryItem = {
+                                id:'0',
                                 name: values.Inventoryname,
                                 description: values.description,
                                 price: values.price,

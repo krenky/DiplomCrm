@@ -18,6 +18,7 @@
         public string? Address { get => address; set => address = value; }
         public DateTime Birthdate { get => birthdate; set => birthdate = value; }
         public List<RepairOrder> RepairOrders { get; set; } = new List<RepairOrder>();
+        public List<CustomerHistory> History { get; set; } = new List<CustomerHistory>();
         public Customer() { }
 
     }

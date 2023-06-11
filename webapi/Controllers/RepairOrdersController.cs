@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webapi.Data;
+using webapi.Interfaсe;
 using webapi.Models;
+using webapi.Services;
 
 namespace webapi.Controllers
 {
@@ -10,10 +12,14 @@ namespace webapi.Controllers
     public class RepairOrdersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IRepairOrderHistoryService _repairOrderHistoryService;
+        private readonly IRepairOrderService _repairOrderService;
 
-        public RepairOrdersController(ApplicationDbContext context)
+        public RepairOrdersController(ApplicationDbContext context, IRepairOrderHistoryService repairOrderHistory, IRepairOrderService orderService)
         {
             _context = context;
+            _repairOrderHistoryService = repairOrderHistory;
+            _repairOrderService = orderService;
         }
 
         // GET: api/RepairOrders
@@ -76,15 +82,32 @@ namespace webapi.Controllers
             //{
             //    return BadRequest();
             //}
-            RepairOrder order = _context.RepairOrders.Find(id);
-            CopyValues<RepairOrder>(order, repairOrder);
-            repairOrder.Id = id;
+            //RepairOrder order = _context.RepairOrders.Find(id);
+            //_repairOrderHistoryService.AddHistory(order, repairOrder, actionHistory.Изменен);
+            //CopyValues<RepairOrder>(order, repairOrder);
+            //repairOrder.Id = id;
 
-            _context.Entry(order).State = EntityState.Modified;
+            //_context.ChangeTracker.DetectChanges();
+            //Console.WriteLine(_context.ChangeTracker.DebugView.LongView);
+
+            List<RepairWork> orders = repairOrder.repairWorks;
+            List<InventoryItem> items = repairOrder.PartsUsed;
+            foreach(var i in repairOrder.repairWorks)
+            {
+                i.repairOrders.Add(repairOrder);
+                _context.Entry(i).State = EntityState.Modified;
+            }
+            foreach (var i in repairOrder.PartsUsed)
+            {
+                i.repairOrders.Add(repairOrder);
+                _context.Entry(i).State = EntityState.Modified;
+            }
+
+            _context.Entry(repairOrder).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -112,6 +135,7 @@ namespace webapi.Controllers
           }
             _context.RepairOrders.Add(repairOrder);
             await _context.SaveChangesAsync();
+            _repairOrderHistoryService.AddHistory(repairOrder, repairOrder, actionHistory.Добавлен);
 
             return CreatedAtAction("GetRepairOrder", new { id = repairOrder.Id }, repairOrder);
         }
@@ -132,8 +156,20 @@ namespace webapi.Controllers
 
             _context.RepairOrders.Remove(repairOrder);
             await _context.SaveChangesAsync();
+            _repairOrderHistoryService.AddHistory(repairOrder, repairOrder, actionHistory.Удален);
 
             return NoContent();
+        }
+
+        [HttpPut("/api/RepairOrders/nextStages/{id}")]
+        public async Task<RepairOrder> SetNextStages(int id, RepairOrder repairOrder)
+        {
+            return _repairOrderService.SetNextSalesStages(id);
+        }
+        [HttpPut("/api/RepairOrders/cancelStages/{id}")]
+        public async Task<RepairOrder> SetCancelStages(int id, RepairOrder repairOrder)
+        {
+            return _repairOrderService.SetCancelSalesStages(id);
         }
 
         private bool RepairOrderExists(int id)
@@ -155,6 +191,27 @@ namespace webapi.Controllers
                 if (value != null)
                     prop.SetValue(target, value, null);
             }
+        }
+        public T GetDifference<T>(T oldData, T newData)
+        {
+            Type t = typeof(T);
+
+            var properties = t.GetProperties().Where(prop => prop.CanRead && prop.CanWrite && prop.Name != "Id");
+            T result = oldData;
+            foreach (var prop in properties)
+            {
+                if (prop.GetValue(newData, null) != prop.GetValue(oldData, null))
+                    prop.SetValue(result, prop.GetValue(newData, null));
+                else
+                    prop.SetValue(result, null);
+                //var value = prop.GetValue(source, null);
+                //if (value is int)
+                //    if ((int)value == 0)
+                //        continue;
+                //if (value != null)
+                //    prop.SetValue(target, value, null);
+            }
+            return result;
         }
     }
 }

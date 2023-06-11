@@ -8,13 +8,17 @@ import SideBar from './scenes/global/Sidebar'
 import Team from './scenes/team'
 import Form from './scenes/form';
 import Calendar from './scenes/calendar';
-import GenericKanban, { KanbanBoard } from './scenes/kanban';
-import RepairOrderForRouteView, { RepairOrderFormik } from './scenes/repairOrder';
 import CustomerList from './scenes/customer';
 import RegisterCustomer from './scenes/registerCustomer/indes';
 import LoginPage from './pages/loginPage';
 import InventoryList from './scenes/Inventory'
 import InventoryAdd from './scenes/InventoryForm';
+import { KanbanBoard } from './scenes/kanban';
+import { RepairOrderFormik } from './scenes/repairOrder';
+import RepairOrdersList from './scenes/repairOrderList';
+import AdvertisingСompanyList from './scenes/AdvertisingСompanyList';
+import AdvertisingСompanyAdd from './scenes/AdvertisingСompanyAdd';
+import AdvertisingСompanyChange from './scenes/AdvertisingСompanyChange';
 // import RepairOrder from './scenes/repairOrder'
 // import Customer from './scenes/customer'
 // import InventoryItem from './scenes/inventoryItem'
@@ -36,7 +40,7 @@ function App() {
               <Route path='/team' element={<Team />} />
               <Route path='/team/add' element={<Form />} />
               <Route path='/calendar' element={<Calendar />} />
-              <Route path='/repairorders' element={<KanbanBoard />} />
+              <Route path='/repairorders' element={<RepairOrdersList />} />
               <Route path='/repairorders/:id' element={<RepairOrderFormik />} />
               <Route path='/сustomers' element={<CustomerList />} />
               <Route path='/сustomers/add' element={<RegisterCustomer />} />
@@ -44,6 +48,9 @@ function App() {
               <Route path='/login' element={<LoginPage />} />
               <Route path='/Inventory' element={<InventoryList />}/>
               <Route path='/Inventory/add' element={<InventoryAdd />}/>
+              <Route path='/advertisingcompanylist' element={<AdvertisingСompanyList/>}/>
+              <Route path='/advertisingcompanylist/add' element={<AdvertisingСompanyAdd/>}/>
+              {/* <Route path='/advertisingcompanylist/change' element={<AdvertisingСompanyChange/>}/> */}
             </Routes>
           </main>
         </div>

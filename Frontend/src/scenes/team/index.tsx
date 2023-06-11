@@ -6,7 +6,6 @@ import { ApplicationUser } from "../../Type";
 import { DataProvider } from '../../providers/dataProvider';
 import { useEffect, useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
-import Form from "../form";
 import React from "react";
 import {ModalForm} from '../form/index'
 
@@ -67,7 +66,7 @@ const Team: React.FC = () => {
 
     return (
         <Box m={"20px"}>
-            <Header title="Сотрудника" subtitle="сотрудники" />
+            <Header title="Сотрудники" subtitle="Список сотрудников" />
             <Box display="flex" flex={1}>
                 <IconButton onClick={handleClickOpen}>
                     <AddIcon />

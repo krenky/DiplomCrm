@@ -19,13 +19,16 @@
     "@emotion/styled": "^11.11.0",
     "@fontsource/inter": "^4.5.15",
     "@uselessdev/datepicker": "^2.7.0",
+    "axios": "^1.4.0",
     "chakra-ui-date-input": "^1.0.0",
     "framer-motion": "^10.12.8",
     "fusion-plugin-react-helmet-async": "^2.6.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
-    "react-scripts": "^5.0.1"
+    "react-notifications": "^1.7.4",
+    "react-scripts": "^5.0.1",
+    "react-toastify": "^9.1.3"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

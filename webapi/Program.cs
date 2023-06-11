@@ -2,9 +2,11 @@ using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json.Serialization;
 using webapi.Data;
 using webapi.Interfañe;
 using webapi.Models;
@@ -23,6 +25,10 @@ builder.Services.AddScoped<ISmtpClient, SmtpClient>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IEmailMessageService, EmailMessageService>();
 builder.Services.AddScoped<ISmtpClient, SmtpClient>();
+builder.Services.AddScoped<ICustomerHistoryService, CustomerHistoryService>();
+builder.Services.AddScoped<IRepairOrderHistoryService, RepairOrderHistoryService>();
+builder.Services.AddScoped<IRepairOrderService, RepairOrderService>();
+builder.Services.AddScoped<IAdvertisingÑompanyService, AdvertisingÑompanyService>();
 builder.Services.AddSingleton<IStartStopCheckBirtdayService, CheckBirthdayBoyService>();
 builder.Services.AddSingleton<IStartStopSenderEmail, SenderEmailService>();
 //builder.Services.Addho
@@ -33,7 +39,7 @@ builder.Services.AddSingleton<IStartStopSenderEmail, SenderEmailService>();
 //builder.Services.AddHostedService<SenderEmailService>();
 #endregion
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connection));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>

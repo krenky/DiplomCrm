@@ -21,6 +21,8 @@ import AddIcon from '@mui/icons-material/Add';
 import dataProvider from "../../providers/dataProvider";
 import { getIdentity } from "../../providers/authProvider";
 import InventoryIcon from '@mui/icons-material/Inventory';
+//import InventoryIcon from '@mui/icons-material/Inventory';
+
 //#endregion
 
 interface ItemProps {
@@ -151,12 +153,17 @@ const SideBar: React.FC = () => {
 
                     <Box paddingLeft={isCollapsed ? undefined : "10%"}>
 
+                        <MenuItem component={<Link to="/" />} icon={<PeopleOutlinedIcon />}>Статистика</MenuItem>
                         <MenuItem component={<Link to="/team" />} icon={<PeopleOutlinedIcon />}>Сотрудники</MenuItem>
                         <MenuItem component={<Link to="/team/add" />} icon={<AddIcon />}>Регистр. сотрдника</MenuItem>
-                        <MenuItem component={<Link to="/calendar" />} icon={<CalendarTodayOutlinedIcon />}>Календарь</MenuItem>
+                        {/* <MenuItem component={<Link to="/calendar" />} icon={<CalendarTodayOutlinedIcon />}>Календарь</MenuItem> */}
                         <MenuItem component={<Link to="/repairorders" />} icon={<ReceiptOutlinedIcon />}>Заявки</MenuItem>
                         <MenuItem component={<Link to="/сustomers" />} icon={<ContactsOutlinedIcon />}>Клиенты</MenuItem>
                         <MenuItem component={<Link to="/сustomers/add" />} icon={<AddIcon />}>Регистр. клиентов</MenuItem>
+                        <MenuItem component={<Link to="/Inventory" />} icon={<InventoryIcon />}>Материалы</MenuItem>
+                        <MenuItem component={<Link to="/Inventory/add" />} icon={<AddIcon />}>Добавить материалы</MenuItem>
+                        <MenuItem component={<Link to="/advertisingcompanylist" />} icon={<AddIcon />}>Рекламные компании</MenuItem>
+                        <MenuItem component={<Link to="/advertisingcompanylist/add" />} icon={<AddIcon />}>Добавить рекламные компании</MenuItem>
                         <Typography
                             variant="h6"
                             color={colors.grey[300]}
@@ -206,26 +213,7 @@ const SideBar: React.FC = () => {
                         >
                             -
                         </Typography>
-                        <MenuItem component={<Link to="/team" />} icon={<PeopleOutlinedIcon />}>Сотрудники</MenuItem>
-                        <MenuItem component={<Link to="/team/add" />} icon={<AddIcon />}>Регистр. сотрдника</MenuItem>
-                        <MenuItem component={<Link to="/calendar" />} icon={<CalendarTodayOutlinedIcon />}>Календарь</MenuItem>
-                        <MenuItem component={<Link to="/repairorders" />} icon={<ReceiptOutlinedIcon />}>Заявки</MenuItem>
-                        <MenuItem component={<Link to="/сustomers" />} icon={<ContactsOutlinedIcon />}>Клиенты</MenuItem>
-                        <MenuItem component={<Link to="/сustomers/add" />} icon={<AddIcon />}>Регистр. клиентов</MenuItem>
-                        <Item
-                            title="Contacts Information"
-                            to="/contacts"
-                            icon={<ContactsOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-                        <Item
-                            title="Invoices Balances"
-                            to="/invoices"
-                            icon={<ReceiptOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
+                        
 
                         <Typography
                             variant="h6"

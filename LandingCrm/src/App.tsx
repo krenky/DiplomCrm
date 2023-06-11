@@ -25,6 +25,9 @@ import video from "./assets/biller-hero-2.webm";
 import microsoftLogo from './assets/microsoft-logo.svg'
 import adobeLogo from './assets/adobe-logo.svg'
 import {Helmet} from 'fusion-plugin-react-helmet-async';
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 interface FeatureType {
@@ -112,6 +115,7 @@ const highlights: HighlightType[] = [
 
 
 export const App = () => {
+
   return (
     <Layout>
       <Box bg="gray.50">

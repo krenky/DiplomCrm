@@ -184,6 +184,34 @@ namespace webapi.Migrations
                     b.ToTable("RepairOrderRepairWork");
                 });
 
+            modelBuilder.Entity("webapi.Models.AdvertisingСompany", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Discount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AdvertisingСompany");
+                });
+
             modelBuilder.Entity("webapi.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -286,6 +314,52 @@ namespace webapi.Migrations
                     b.ToTable("Customer");
                 });
 
+            modelBuilder.Entity("webapi.Models.CustomerHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ActionHistory")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("Birthdate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("End")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("customerHistories");
+                });
+
             modelBuilder.Entity("webapi.Models.Device", b =>
                 {
                     b.Property<int>("Id")
@@ -385,6 +459,9 @@ namespace webapi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AdvertisingСompanyId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("text");
 
@@ -401,16 +478,10 @@ namespace webapi.Migrations
                     b.Property<int>("DeviceId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("EndedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<bool>("LoyaltyDiscount")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime>("StartedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Status")
+                    b.Property<int?>("SalesStagesId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Updated")
@@ -418,13 +489,74 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AdvertisingСompanyId");
+
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("DeviceId");
 
+                    b.HasIndex("SalesStagesId");
+
                     b.ToTable("RepairOrders");
+                });
+
+            modelBuilder.Entity("webapi.Models.RepairOrderHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ActionHistory")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("DeviceId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("End")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool?>("LoyaltyDiscount")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("RepairOrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SalesStagesId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("Start")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeviceId");
+
+                    b.HasIndex("RepairOrderId");
+
+                    b.ToTable("RepairOrderHistory");
                 });
 
             modelBuilder.Entity("webapi.Models.RepairWork", b =>
@@ -449,6 +581,109 @@ namespace webapi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RepairWorks");
+                });
+
+            modelBuilder.Entity("webapi.Models.SalesStages", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsCancelDefault")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsFirstDefault")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsLastDefault")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("NextStagesId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NextStagesId");
+
+                    b.ToTable("SalesStages");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsCancelDefault = false,
+                            IsFirstDefault = true,
+                            IsLastDefault = false,
+                            Name = "Обращение клиента",
+                            NextStagesId = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsCancelDefault = false,
+                            IsFirstDefault = false,
+                            IsLastDefault = false,
+                            Name = "Приемка устройства",
+                            NextStagesId = 3
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsCancelDefault = false,
+                            IsFirstDefault = false,
+                            IsLastDefault = false,
+                            Name = "Информирование клиента о стоимости ремонта",
+                            NextStagesId = 4
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsCancelDefault = false,
+                            IsFirstDefault = false,
+                            IsLastDefault = false,
+                            Name = "Ожидание запчастей",
+                            NextStagesId = 5
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsCancelDefault = false,
+                            IsFirstDefault = false,
+                            IsLastDefault = false,
+                            Name = "Ремонт",
+                            NextStagesId = 6
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsCancelDefault = false,
+                            IsFirstDefault = false,
+                            IsLastDefault = false,
+                            Name = "Оплата ремонта",
+                            NextStagesId = 7
+                        },
+                        new
+                        {
+                            Id = 7,
+                            IsCancelDefault = false,
+                            IsFirstDefault = false,
+                            IsLastDefault = true,
+                            Name = "Завершен"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            IsCancelDefault = true,
+                            IsFirstDefault = false,
+                            IsLastDefault = false,
+                            Name = "Отказ"
+                        });
                 });
 
             modelBuilder.Entity("InventoryItemRepairOrder", b =>
@@ -532,13 +767,26 @@ namespace webapi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("webapi.Models.CustomerHistory", b =>
+                {
+                    b.HasOne("webapi.Models.Customer", null)
+                        .WithMany("History")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("webapi.Models.RepairOrder", b =>
                 {
+                    b.HasOne("webapi.Models.AdvertisingСompany", "AdvertisingСompany")
+                        .WithMany("RepairOrders")
+                        .HasForeignKey("AdvertisingСompanyId");
+
                     b.HasOne("webapi.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("RepairOrders")
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("webapi.Models.Customer", null)
+                    b.HasOne("webapi.Models.Customer", "Customer")
                         .WithMany("RepairOrders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -550,9 +798,48 @@ namespace webapi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("webapi.Models.SalesStages", "SalesStages")
+                        .WithMany("Orders")
+                        .HasForeignKey("SalesStagesId");
+
+                    b.Navigation("AdvertisingСompany");
+
                     b.Navigation("ApplicationUser");
 
+                    b.Navigation("Customer");
+
                     b.Navigation("Device");
+
+                    b.Navigation("SalesStages");
+                });
+
+            modelBuilder.Entity("webapi.Models.RepairOrderHistory", b =>
+                {
+                    b.HasOne("webapi.Models.Device", "Device")
+                        .WithMany()
+                        .HasForeignKey("DeviceId");
+
+                    b.HasOne("webapi.Models.RepairOrder", null)
+                        .WithMany("History")
+                        .HasForeignKey("RepairOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Device");
+                });
+
+            modelBuilder.Entity("webapi.Models.SalesStages", b =>
+                {
+                    b.HasOne("webapi.Models.SalesStages", "NextStages")
+                        .WithMany()
+                        .HasForeignKey("NextStagesId");
+
+                    b.Navigation("NextStages");
+                });
+
+            modelBuilder.Entity("webapi.Models.AdvertisingСompany", b =>
+                {
+                    b.Navigation("RepairOrders");
                 });
 
             modelBuilder.Entity("webapi.Models.ApplicationUser", b =>
@@ -562,7 +849,19 @@ namespace webapi.Migrations
 
             modelBuilder.Entity("webapi.Models.Customer", b =>
                 {
+                    b.Navigation("History");
+
                     b.Navigation("RepairOrders");
+                });
+
+            modelBuilder.Entity("webapi.Models.RepairOrder", b =>
+                {
+                    b.Navigation("History");
+                });
+
+            modelBuilder.Entity("webapi.Models.SalesStages", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

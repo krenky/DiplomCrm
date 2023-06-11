@@ -21,5 +21,6 @@
         public DateTime Birtdate { get => birtdate; set => birtdate = value; }
         public string PhoneModel { get => phoneModel; set => phoneModel = value; }
         public string Comment { get => comment; set => comment = value; }
+        public AdvertisingСompany Code { get;set; }
     }
 }

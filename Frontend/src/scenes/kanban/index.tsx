@@ -1,11 +1,10 @@
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { Box, IconButton, ListItemSecondaryAction, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { RepairOrder, StatusRepair } from '../../Type';
+import { RepairOrder, SalesStages, StatusRepair } from '../../Type';
 import dataProvider, { DataProvider } from '../../providers/dataProvider';
 import Header from '../../components/Header';
 import { tokens } from '../../theme';
-import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 
 interface Item {
@@ -28,7 +27,7 @@ function GenericKanban() {
     const [queuedOrders, setQueuedOrders] = useState<RepairOrder[]>([]);
     const [inWorkOrders, setinWorkOrders] = useState<RepairOrder[]>([]);
     const [successOrders, setSuccessOrders] = useState<RepairOrder[]>([]);
-    const [changKan, setChangKan] = useState<Boolean>(false);
+    const [changKan, setChangKan] = useState<boolean>(false);
     const [kanbanColumns, setKanbanColumns] = useState<KanbanProps>({
         columns: {
             "Queued": {
@@ -61,23 +60,23 @@ function GenericKanban() {
                 const response = await dataProvider.getList<RepairOrder>('repairorders');
                 const data = response.data || []
                 //const data = await response.json();
-                setKanbanColumns((prevColumns) => ({
-                    columns: {
-                        ...prevColumns.columns,
-                        "Queued": {
-                            ...prevColumns.columns["Queued"],
-                            items: data.filter((value) => value.status === StatusRepair.Queued),
-                        },
-                        "InWork": {
-                            ...prevColumns.columns["InWork"],
-                            items: data.filter((value) => value.status === StatusRepair.InWork),
-                        },
-                        "Success": {
-                            ...prevColumns.columns["Success"],
-                            items: data.filter((value) => value.status === StatusRepair.Success),
-                        },
-                    },
-                }));
+                // setKanbanColumns((prevColumns) => ({
+                //     columns: {
+                //         ...prevColumns.columns,
+                //         "Queued": {
+                //             ...prevColumns.columns["Queued"],
+                //             items: data.filter((value) => value.status === StatusRepair.Queued),
+                //         },
+                //         "InWork": {
+                //             ...prevColumns.columns["InWork"],
+                //             items: data.filter((value) => value.status === StatusRepair.InWork),
+                //         },
+                //         "Success": {
+                //             ...prevColumns.columns["Success"],
+                //             items: data.filter((value) => value.status === StatusRepair.Success),
+                //         },
+                //     },
+                // }));
             } catch (error) {
                 console.error(error);
             } finally {
@@ -87,9 +86,9 @@ function GenericKanban() {
         fetchData();
     }, [changKan]);
     useEffect(() => {
-        setQueuedOrders(orders.filter((value) => value.status === StatusRepair.Queued));
-        setinWorkOrders(orders.filter((value) => value.status === StatusRepair.InWork));
-        setSuccessOrders(orders.filter((value) => value.status === StatusRepair.Success));
+        // setQueuedOrders(orders.filter((value) => value.status === StatusRepair.Queued));
+        // setinWorkOrders(orders.filter((value) => value.status === StatusRepair.InWork));
+        // setSuccessOrders(orders.filter((value) => value.status === StatusRepair.Success));
     }, [orders]);
 
 
@@ -133,20 +132,21 @@ function GenericKanban() {
                     items: destinationItems,
                 },
             });
-            switch (destinationColumn.id) {
-                case 'inWork': {
-                    removed.status = StatusRepair.InWork;
-                    break;
-                }
-                case 'queued': {
-                    removed.status = StatusRepair.Queued;
-                    break;
-                }
-                case 'success': {
-                    removed.status = StatusRepair.Success;
-                    break;
-                }
-            }
+            removed.salesStagesId = destinationColumn.id
+            // switch (destinationColumn.id) {
+            //     case 'inWork': {
+            //         removed.status = StatusRepair.InWork;
+            //         break;
+            //     }
+            //     case 'queued': {
+            //         removed.status = StatusRepair.Queued;
+            //         break;
+            //     }
+            //     case 'success': {
+            //         removed.status = StatusRepair.Success;
+            //         break;
+            //     }
+            // }
             dataProvider.update<RepairOrder>('repairorders', removed.id || '0', removed)
             setChangKan(!changKan);
         }
@@ -207,7 +207,7 @@ function GenericKanban() {
                                         {(provided) => (
                                             <Box ref={provided.innerRef} {...provided.droppableProps} >
                                                 {column.items.map((item, index) => (
-                                                    <Draggable key={item.id} draggableId={item.status.toString()} index={index}>
+                                                    <Draggable key={item.id} draggableId={item.salesStagesId.toString()} index={index}>
                                                         {(provided) => (
                                                             <Box
                                                                 sx={{ color: colors, }}
@@ -243,7 +243,8 @@ function GenericKanban() {
             }
         </Box >
     );
-};
+}
+
 function redirect(id: string) {
     document.location = 'http://localhost:5173/repairorders/' + id;
 }
@@ -268,29 +269,40 @@ export function KanbanBoard() {
         },
     ]);
 
+function convertStatusToColumn(sourse:SalesStages):Column{
+    return {
+        id: sourse.id,
+        name: sourse.name,
+        items: sourse.orders
+    }
+}
+
     const fetchDataFromBackend = async () => {
         try {
             const response = await dataProvider.getList<RepairOrder>('repairorders');
+            const status = await dataProvider.getList<SalesStages>('SalesStages');
 
             // if (!response.ok) {
             //     throw new Error('Failed to fetch data from the backend.');
             // }
-
+            const dataStatus = await status.data || []
             const data = await response.data || [];
 
-            const columns: Column[] = [{
-                id: 'queued',
-                name: 'В очереди',
-                items: data.filter((value) => value.status === StatusRepair.Queued)
-            }, {
-                id: 'inWork',
-                name: 'В работе',
-                items: data.filter((value) => value.status === StatusRepair.InWork),
-            }, {
-                id: 'success',
-                name: 'Выполнен',
-                items: data.filter((value) => value.status === StatusRepair.Success),
-            },]
+            const columns: Column[] = dataStatus.map(convertStatusToColumn);
+
+            // [{
+            //     id: 'queued',
+            //     name: 'В очереди',
+            //     items: data.filter((value) => value.status === StatusRepair.Queued)
+            // }, {
+            //     id: 'inWork',
+            //     name: 'В работе',
+            //     items: data.filter((value) => value.status === StatusRepair.InWork),
+            // }, {
+            //     id: 'success',
+            //     name: 'Выполнен',
+            //     items: data.filter((value) => value.status === StatusRepair.Success),
+            // },]
 
             setColumns(columns);
             setIsLoading(false);
@@ -362,21 +374,22 @@ export function KanbanBoard() {
                     return col;
                 });
 
+                removed.salesStagesId = destinationColumn.id;
+                // switch (destinationColumn.id) {
+                //     case 'inWork': {
+                //         removed.status = StatusRepair.InWork;
+                //         break;
+                //     }
+                //     case 'queued': {
+                //         removed.status = StatusRepair.Queued;
+                //         break;
+                //     }
+                //     case 'success': {
+                //         removed.status = StatusRepair.Success;
+                //         break;
+                //     }
+                // }
                 setColumns(updatedColumns);
-                switch (destinationColumn.id) {
-                    case 'inWork': {
-                        removed.status = StatusRepair.InWork;
-                        break;
-                    }
-                    case 'queued': {
-                        removed.status = StatusRepair.Queued;
-                        break;
-                    }
-                    case 'success': {
-                        removed.status = StatusRepair.Success;
-                        break;
-                    }
-                }
                 updateDataOnBackend(removed.id || '0', removed)
             }
         }
@@ -392,7 +405,7 @@ export function KanbanBoard() {
                             {(provided) => (
                                 <Box ref={provided.innerRef} {...provided.droppableProps} /*style={{ background: 'lightgrey' }}*/ sx={{ color: colors, }}>
                                     {column.items.map((item, index) => (
-                                        <Draggable key={item.id} draggableId={item.status.toString() || ''} index={index}>
+                                        <Draggable key={item.id} draggableId={item.salesStagesId || ''} index={index}>
                                             {(provided) => (
                                                 <Box
                                                 sx={{ color: colors, }}

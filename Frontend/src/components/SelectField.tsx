@@ -41,7 +41,9 @@ export const SelecField = ({
         if (options) {
             return isMulti
                 ? options.filter(option => {
-                    field.value?field.value:field.value = [];
+                    
+                    
+                    field.value?field.value:field.value = value;
                     const result = field.value.find((values:Option) => {
                         console.log(values);
                         return values.value === option.value});

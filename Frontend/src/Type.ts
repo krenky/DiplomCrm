@@ -29,18 +29,21 @@ export interface RepairOrder {
     customerId?: string;
     customer?: Customer
     deviceId?: string;
-    status: StatusRepair;
+    salesStagesId: string;
+    salesStages: SalesStages;
     description: string;
     created: Date;
     updated: Date;
-    startedAt: Date;
-    endedAt: Date;
     device?: Device;
     partsUsed?: InventoryItem[];
     applicationUserId?: string;
     applicationUser?: ApplicationUser;
     price: number;
+    repairWorks?:RepairWork[];
     loyaltyDiscount:boolean;
+    advertisingСompan?:AdvertisingСompany;
+    birthdayLoyaltyDiscount?:boolean;
+    isWithLoyaltyDiscount?:boolean
 }
 
 export interface InventoryItem {
@@ -80,4 +83,22 @@ export enum StatusRepair {
     Success,
     InWork,
     Queued
+}
+
+export interface SalesStages{
+    id:string;
+    name:string;
+    orders: RepairOrder[];
+    isFirstDefault:boolean;
+    isLastDefault:boolean;
+    isCancelDefault:boolean;
+}
+
+export interface AdvertisingСompany{
+    id?:string;
+    name:string;
+    discount:number;
+    description:string;
+    code:string;
+    repairOrders?:RepairOrder[];
 }

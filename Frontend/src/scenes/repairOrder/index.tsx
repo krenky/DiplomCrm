@@ -19,7 +19,7 @@ import {
 
 } from '@mui/material';
 import { tokens } from '../../theme';
-import { Customer, Device, InventoryItem, RepairOrder, RepairWork, StatusRepair } from '../../Type';
+import { Customer, Device, InventoryItem, RepairOrder, RepairWork, SalesStages, StatusRepair } from '../../Type';
 import { useParams } from 'react-router-dom';
 import { Field, FieldInputProps, Form, Formik } from 'formik';
 import * as yup from "yup";
@@ -35,8 +35,18 @@ interface multiSelect {
     value: string
 }
 
+const defaultStages: SalesStages = {
+    id: '',
+    name: '',
+    isFirstDefault: false,
+    isLastDefault: false,
+    isCancelDefault: false,
+    orders: []
+}
+
 const initialValues = {
-    status: StatusRepair.InWork,
+    salesStages: defaultStages,
+    salesStagesId: "",
     description: "",
     startedAt: new Date(Date.now()),
     endedAt: new Date(Date.now()),
@@ -54,7 +64,7 @@ const initialValues = {
     allPastUsedInventory: [] as InventoryItem[]
 }
 const userSchema = yup.object().shape({
-    status: yup.string().required("required"),
+    salesStages: yup.string().required("required"),
     description: yup.string().required("required"),
     startedAt: yup.string().required("required"),
     endedAt: yup.string().required("required"),
@@ -70,8 +80,6 @@ const RepairOrderView = ({ id }: RepairOrderViewProps) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [repairOrder, setRepairOrder] = useState<RepairOrder | null>(null);
     const isNonMobile = useMediaQuery("(min-width:600px)");
-    const [order, setOrder] = useState<RepairOrder | null>(null);
-    const [device, setDevice] = useState<Device>();
     const handleForSumbit = (values: any) => {
         console.log(values)
     }
@@ -86,21 +94,19 @@ const RepairOrderView = ({ id }: RepairOrderViewProps) => {
                     const customer = result.data.customer || {} as Customer
                     initialValues.created = result.data.created
                     initialValues.updated = result.data.updated
-                    initialValues.startedAt = result.data.startedAt
-                    initialValues.endedAt = result.data.endedAt
                     initialValues.description = result.data.description
-                    initialValues.status = result.data.status
+                    initialValues.salesStages = result.data.salesStages
                     initialValues.price = result.data.price
                     initialValues.loyaltyDiscount = result.data.loyaltyDiscount
                     initialValues.partUsedInventory = result.data.partsUsed || [] as InventoryItem[]
-                    initialValues.partsUsed = result.data.partsUsed? result.data.partsUsed.map((item) => {
+                    initialValues.partsUsed = result.data.partsUsed ? result.data.partsUsed.map((item) => {
                         const values: Option = {
                             label: item.name.toString(),
                             value: item.id.toString()
                         }
                         return values;
                     }
-                    ):[] as Option[]
+                    ) : [] as Option[]
 
                     if (result.data.device)
                         initialValues.deviceName = result.data.device.manufacturer + ' ' + result.data.device.name || ' '
@@ -142,7 +148,7 @@ const RepairOrderView = ({ id }: RepairOrderViewProps) => {
                                                             return values;
                                                         }
                                                         )
-                                                        initialValues.allPastUsedInventory = result.data ||[] as InventoryItem[]
+                                                    initialValues.allPastUsedInventory = result.data || [] as InventoryItem[]
                                                     setLoading(false);
                                                 })
                                                 .catch((error) => console.error(error))
@@ -198,10 +204,10 @@ const RepairOrderView = ({ id }: RepairOrderViewProps) => {
                                 label="Статус"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                value={StatusRepair[values.status]}
+                                value={values.salesStages.name}
                                 name="status"
-                                error={!!touched.status && !!errors.status}
-                                helperText={touched.status && errors.status}
+                                error={!!touched.salesStages && !!errors.salesStages}
+                                //helperText={touched.salesStages && errors.salesStages}
                                 sx={{ gridColumn: "span 2" }}
                             />
                             <TextField
@@ -243,31 +249,6 @@ const RepairOrderView = ({ id }: RepairOrderViewProps) => {
                                 //helperText={touched.updated && errors.updated}
                                 sx={{ gridColumn: "span 2" }}
 
-                            />
-                            <TextField
-                                fullWidth
-                                type="text"
-                                label="Дата начало ремонта"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.startedAt}
-                                name="startedAt"
-                                error={!!touched.startedAt && !!errors.startedAt}
-                                //helperText={touched.startedAt && errors.startedAt}
-                                sx={{ gridColumn: "span 2" }}
-
-                            />
-                            <TextField
-                                fullWidth
-                                type="text"
-                                label="Дата окончания ремонта"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.endedAt}
-                                name="endedAt"
-                                error={!!touched.endedAt && !!errors.endedAt}
-                                //helperText={touched.endedAt.toString()||'' && errors.endedAt.toDateString()}
-                                sx={{ gridColumn: "span 2" }}
                             />
                             <TextField
                                 fullWidth
@@ -349,15 +330,14 @@ const RepairOrderView = ({ id }: RepairOrderViewProps) => {
                         <Box display="flex" justifyContent="end" mt="20px">
                             <Button type="submit" color="secondary" variant="contained" onClick={() => {
                                 const user: RepairOrder = {
-                                    status: values.status,
+                                    salesStages: values.salesStages,
+                                    salesStagesId: values.salesStagesId,
                                     description: values.description,
-                                    startedAt: values.startedAt,
-                                    endedAt: values.endedAt,
                                     created: values.created,
                                     updated: values.updated,
                                     price: values.price,
                                     loyaltyDiscount: values.loyaltyDiscount,
-                                    partsUsed: values.allPastUsedInventory.filter((item) => values.partsUsed.findIndex((itemOption)=>itemOption.value === item.id) != -1),
+                                    partsUsed: values.allPastUsedInventory.filter((item) => values.partsUsed.findIndex((itemOption) => itemOption.value === item.id) != -1),
                                     // values.partsUsed.map((item)=> {
                                     //     const value: InventoryItem = {
                                     //         id: item.value,
@@ -432,7 +412,7 @@ function RepairOrderForRouteView() {
                     <TableHead>
                         <TableRow>
                             <TableCell>Status</TableCell>
-                            <TableCell>{repairOrder.status.toString()}</TableCell>
+                            <TableCell>{repairOrder.salesStages.name}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -442,18 +422,8 @@ function RepairOrderForRouteView() {
                         </TableRow>
                         <TableRow>
                             <TableCell>Status</TableCell>
-                            <TableCell>{repairOrder.status.toString()}</TableCell>
+                            <TableCell>{repairOrder.salesStages.name}</TableCell>
                         </TableRow>
-                        <TableRow>
-                            <TableCell>Started At</TableCell>
-                            <TableCell>{repairOrder.startedAt.toLocaleString()}</TableCell>
-                        </TableRow>
-                        {repairOrder.endedAt && (
-                            <TableRow>
-                                <TableCell>Ended At</TableCell>
-                                <TableCell>{repairOrder.endedAt.toLocaleString()}</TableCell>
-                            </TableRow>
-                        )}
                         <TableRow>
                             <TableCell>Created At</TableCell>
                             <TableCell>{repairOrder.created.toLocaleString()}</TableCell>
